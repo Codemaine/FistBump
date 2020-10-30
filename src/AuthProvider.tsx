@@ -24,14 +24,14 @@ export const AuthProvider = ({ children }: any) => {
     }, []);
 
     return (
-        <AuthContext.Provider 
+        <AuthContext.Provider
             value={{
                 user,
                 authenticated: user !== null,
                 setUser,
                 loadingAuthState
             }}>
-                {children}
+            {children}
         </AuthContext.Provider>
     );
 }

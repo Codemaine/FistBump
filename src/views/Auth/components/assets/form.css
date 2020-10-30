@@ -1,0 +1,98 @@
+
+/* Styles for wrapping the search box */
+
+.root {
+  height: 100vh !important;
+}
+
+/* Bootstrap 4 text input with search icon */
+
+.has-search .form-control {
+  padding-left: 2.375rem;
+}
+
+.form-group {
+  width: 50%;
+}
+
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
+.g-sign-in-button {
+  margin: 10px;
+  display: inline-block;
+  width: 240px;
+  height: 50px;
+  background-color: #4285f4;
+  color: #fff;
+  border-radius: 1px;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.25);
+  transition: background-color .218s, border-color .218s, box-shadow .218s;
+}
+
+.g-sign-in-button:hover {
+  cursor: pointer;
+  -webkit-box-shadow: 0 0 3px 3px rgba(66, 133, 244, 0.3);
+  box-shadow: 0 0 3px 3px rgba(66, 133, 244, 0.3);
+}
+
+.g-sign-in-button:active {
+  background-color: #3367D6;
+  transition: background-color 0.2s;
+}
+
+.g-sign-in-button .content-wrapper {
+  height: 100%;
+  width: 100%;
+  border: 1px solid transparent;
+}
+
+.g-sign-in-button img {
+  width: 18px;
+  height: 18px;
+}
+
+.g-sign-in-button .logo-wrapper {
+  padding: 10px 15px;
+  margin-left: 0px;
+  background: #fff;
+  width: 48px;
+  height: 100%;
+  border-radius: 1px;
+  display: inline-block;
+}
+
+.g-sign-in-button .text-container {
+  font-family: Roboto,arial,sans-serif;
+  font-weight: 500;
+  letter-spacing: .21px;
+  font-size: 16px;
+  line-height: 48px;
+  vertical-align: top;
+  border: none;
+  display: inline-block;
+  text-align: center;
+  width: 180px;
+}
+
+
+.has-search .form-control-feedback {
+  position: absolute;
+  z-index: 2;
+  display: block;
+  width: 2.375rem;
+  height: 2.375rem;
+  line-height: 2.375rem;
+  text-align: center;
+  pointer-events: none;
+  color: #aaa;
+}
+
+
+
+.form-control:focus {
+  outline: none !important;
+   box-shadow: none;
+   border: none;
+}

@@ -1,8 +1,12 @@
 import React, { useState, useContext, useEffect } from "react";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+// eslint-disable-next-line
 import firebase from "../../../firebase";
 import "firebase/auth";
 import "firebase/firestore";
+import './u.css'
+import './assets/form.css'
+import loading from './assets/loading.gif'
 import { AuthContext } from "../../../AuthProvider";
 
 interface UserData {
@@ -10,9 +14,11 @@ interface UserData {
     password: string;
 }
 
+
+
 const Login = () => {
     const authContext = useContext(AuthContext);
-    const {loadingAuthState} = useContext(AuthContext);
+    const { loadingAuthState } = useContext(AuthContext);
     const history = useHistory();
     const [values, setValues] = useState({
         email: "",
@@ -21,22 +27,23 @@ const Login = () => {
 
     const db = firebase.firestore();
 
+
     useEffect(() => {
         firebase
-        .auth()
-        .getRedirectResult()
-        .then(result => {
-            if (!result || !result.user || !firebase.auth().currentUser) {
-                return;
-            }
+            .auth()
+            .getRedirectResult()
+            .then(result => {
+                if (!result || !result.user || !firebase.auth().currentUser) {
+                    return;
+                }
 
-            return setUserProfile().then(() => {
-                redirectToTargetPage();
+                return setUserProfile().then(() => {
+                    redirectToTargetPage();
+                });
+            })
+            .catch(error => {
+                console.log(error, 'error');
             });
-        })
-        .catch(error => {
-            console.log(error, 'error');
-        });
 
     }, []);
 
@@ -47,19 +54,19 @@ const Login = () => {
 
         const currentUser = firebase.auth().currentUser!;
         db
-        .collection("Users")
-        .doc(currentUser.uid)
-        .set({
-            username: currentUser.displayName
-        })
-        .then(() => {
-            console.log('Saved');
-            return;
-        })
-        .catch(error => {
-            console.log(error.message);
-            alert(error.message);
-        })
+            .collection("Users")
+            .doc(currentUser.uid)
+            .set({
+                username: currentUser.displayName
+            })
+            .then(() => {
+                console.log('Saved');
+                return;
+            })
+            .catch(error => {
+                console.log(error.message);
+                alert(error.message);
+            })
     }
 
     const isUserExists = async () => {
@@ -70,18 +77,19 @@ const Login = () => {
         return doc.exists;
     }
 
+
     const redirectToTargetPage = () => {
         history.push("/dashboard");
     }
 
     const handleClick = () => {
-       history.push("/auth/signup") 
+        history.push("/auth/signup")
     }
 
     const handleChange = (event: any) => {
         event.persist();
         setValues(values => ({
-            ...values, 
+            ...values,
             [event.target.name]: event.target.value
         }));
     }
@@ -90,17 +98,27 @@ const Login = () => {
         event.preventDefault();
 
         firebase
-        .auth()
-        .signInWithEmailAndPassword(values.email, values.password)
-        .then(res => {
-            authContext.setUser(res);
-            console.log(res, 'res')
-            history.push("/dashboard");
-        })
-        .catch(error => {
-            console.log(error.message);
-            alert(error.message);
-        });
+            .auth()
+            .signInWithEmailAndPassword(values.email, values.password)
+            .then(res => {
+                authContext.setUser(res);
+                console.log(res, 'res')
+                history.push("/dashboard");
+            })
+            .catch(error => {
+                console.log(error.message);
+                let con = document.getElementById('error')!
+                con.style.display = "block";
+                if (error.message === "There is no user record corresponding to this identifier. The user may have been deleted.") {
+                    error.message = 'There has been no user found with this email.'
+                }
+                if (error.message === "A network error (such as timeout, interrupted connection or unreachable host) has occurred.") {
+                    error.message = 'A network error has occured. Please check your connection.'
+                }
+                con.innerHTML = error.message
+
+
+            });
     }
 
     const handleSocialClick = (sns: any) => {
@@ -112,53 +130,68 @@ const Login = () => {
                 provider = new firebase.auth.FacebookAuthProvider();
                 console.log(provider, 'fbprovider');
                 break;
-            
+
             case "Google":
                 provider = new firebase.auth.GoogleAuthProvider();
                 console.log(provider, 'gprovider');
                 break;
 
             case "Twitter":
-                provider = new firebase.auth.TwitterAuthProvider();
+                provider = new firebase.auth.GithubAuthProvider();
                 break;
-        
+
             default:
-                throw new Error("Unsupported SNS" + sns)
+                throw new Error("Unsupported SNS " + sns)
         }
 
         firebase
-        .auth()
-        .signInWithRedirect(provider)
-        .catch(handleAuthError);
+            .auth()
+            .signInWithRedirect(provider)
+            .catch(handleAuthError);
     }
+
+
 
     const handleAuthError = (error: firebase.auth.Error) => {
         console.log(error)
     }
 
+
     if (loadingAuthState) {
+
         return (
             <div>
-                <h1>Loading...</h1>
-            </div>  
+                <div className="text-center">
+                    <div className="spinner-border" style={{ marginLeft: '50vw', width: '5rem', height: '5rem' }} role="status">
+                        <span className="sr-only">Loading...</span>
+                    </div>
+                </div>
+            </div>
         );
     }
 
-    return (
-        <div style={{textAlign: 'center'}}>
-            <h1>Login</h1>
-            <form onSubmit={handleSubmit}>
-                <input type="text" name="email" value={values.email} placeholder="Enter your Email" onChange={handleChange} /><br /><br />
-                <input type="password" name="password" value={values.password} placeholder="Enter your Password" onChange={handleChange} /><br /><br />
-                <button>Login</button>
-                <p>Not logged in yet?</p>
-                <button onClick={handleClick}>SignUp</button> <br/><br/>
-            </form>
+    db.collection("cities").get().then(function (querySnapshot) {
+        querySnapshot.forEach(function (doc) {
+            // doc.data() is never undefined for query doc snapshots
+            console.log(doc.id, " => ", doc.data());
+        });
+    });
 
-                <p>Social SignUp</p>
-                <button onClick={() => handleSocialClick("Facebook")}>SignIn with Facebook</button><br/><br/>
-                <button onClick={() => handleSocialClick("Google")}>SignIn with Google</button><br/><br/>
-                <button onClick={() => handleSocialClick("Twitter")}>SignIn with Twitter</button><br/><br/>
+
+    return (
+        <div style={{ textAlign: 'center' }}>
+            <link rel="stylesheet" href='https://googledrive.com/host/1CCwkBmsaAppGwnuvwGKAP90-UdjqECZ4' />
+            <form className="form-signin needs-validation" noValidate onSubmit={handleSubmit}>
+                <img className="mb-4" src="https://i.ibb.co/8Nyq7r8/n8pk9u-X-removebg-preview.png" alt="" width={72} height={72} />
+                <h1 className="h3 mb-3 font-weight-normal">Login</h1>
+                <label htmlFor="validationCustom01" className="sr-only">Email address</label>
+                <input type="email" id="validationCustom01" className="form-control was-validated" name="email" value={values.email} placeholder="Email address" onChange={handleChange} required />
+                <label htmlFor="validationCustom02" className="sr-only">Password</label>
+                <input type="password" id="validationCustom02" className="form-control was-validated" placeholder="Password" value={values.password} name="password" onChange={handleChange} required />
+                <p style={{ color: 'red' }} id="error"></p>
+                <button className="btn btn-lg btn-primary btn-block" type="submit" >Sign in</button>
+                <p className="mt-5 mb-3">New to Fistbump? <a style={{ color: '#660099', cursor: 'pointer' }} onClick={handleClick}>Create an account.</a></p>
+            </form>
         </div>
     );
 }

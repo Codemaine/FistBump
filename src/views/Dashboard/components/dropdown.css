@@ -1,0 +1,35 @@
+.dropdown-toggle::after {
+    display: none;
+}
+
+#search{
+    display:block;
+    text-align:center;
+}
+
+.form-group .has-search {
+    padding-left: 0px !important;
+}
+
+.search-input {
+    width: 400px !important;
+    box-shadow: 5px 5px 5px black;
+    transition: ease;
+}
+
+datalist {
+    border-Radius: 0px;
+    border: 1px solid black;
+}
+@media (min-width: 1200px) {
+
+        .dropdown-menu {
+            margin-left: -85px !important;
+        }
+    }
+
+@media screen and (max-width: 2000px) {
+    .dropdown-menu {
+      margin-left: -20px !important;
+    }
+  }

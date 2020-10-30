@@ -6,12 +6,13 @@ import { DashboardRoutes } from "../views/Dashboard";
 // import { Dashboard } from "../views/Dashboard/components";
 
 const ApplicationRoutes = () => {
-    return (   
+    return (
         <Router>
             <Switch>
-                <PrivateRoute exact path="/dashboard" component={DashboardRoutes}/>
+                <PrivateRoute exact path="/dashboard" component={DashboardRoutes} />
+                <PrivateRoute path="/posts/:id/:name/:des/:pic" component={DashboardRoutes} />
                 <Route path="/auth" component={AuthRoutes} />
-                <Redirect to="/auth" from= "/" />
+                <Redirect to="/auth" from="/" />
                 {/* <Route path="/" component={AuthRoutes} /> */}
             </Switch>
         </Router>
