@@ -129,137 +129,139 @@ class SimpleForm extends Component {
 
     return (
       <div>
-        <div className="createPost">
-          <div class="d-flex justify-content-center"><h2>Create Post</h2></div>
-          <form onSubmit={this.onSubmitForm} className="needs-validation">
-            <div class="form-group w-100">
-              <label for="Post_Title">Post Title</label>
-              <input type="text" class="form-control" name="Post_Title" id="Post_Title" aria-describedby="Post_Title" value={this.state.posts_name} onChange={this.onInputchange} placeholder="Enter Post Title" required />
-              <small id="Post_Title"></small>
-            </div>
-            <div class="form-group w-100">
-              <label for="exampleInputPassword1">Post Content</label>
-              <textarea type="text" class="form-control" name="Post_Content" id="exampleInputPasswrd1" value={this.state.posts_content}
-                onChange={this.onInputchange} style={{ resize: 'none', height: '158px' }} placeholder="Enter Post Content" required />
-            </div>
-            <div class="input-group mb-3 w-100">
-              <div class="input-group-prepend">
-                <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
+        <div className="container">
+          <div className="createPost">
+            <div class="d-flex justify-content-center"><h2>Create Post</h2></div>
+            <form onSubmit={this.onSubmitForm} className="needs-validation">
+              <div class="form-group w-100">
+                <label for="Post_Title">Post Title</label>
+                <input type="text" class="form-control" name="Post_Title" id="Post_Title" aria-describedby="Post_Title" value={this.state.posts_name} onChange={this.onInputchange} placeholder="Enter Post Title" required />
+                <small id="Post_Title"></small>
               </div>
-              <div class="custom-file">
-                <input type="file" name="Post_Image_Url" onChange={this.handleChange} class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" />
-                <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+              <div class="form-group w-100">
+                <label for="exampleInputPassword1">Post Content</label>
+                <textarea type="text" class="form-control" name="Post_Content" id="exampleInputPasswrd1" value={this.state.posts_content}
+                  onChange={this.onInputchange} style={{ resize: 'none', height: '158px' }} placeholder="Enter Post Content" required />
               </div>
-            </div>
-            <button type="submit" onClick={this.onSubmitForm} class="btn btn-primary">Submit</button>
-          </form>
-        </div>
-        <ul className='posts'>
-          {this.state.posts.map((posts, id) => {
-            if (posts.Creator_Email === firebase.auth().currentUser.email) {
-              return (
+              <div class="input-group mb-3 w-100">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
+                </div>
+                <div class="custom-file">
+                  <input type="file" name="Post_Image_Url" onChange={this.handleChange} class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" />
+                  <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                </div>
+              </div>
+              <button type="submit" onClick={this.onSubmitForm} class="btn btn-primary">Submit</button>
+            </form>
+          </div>
+          <ul className='posts'>
+            {this.state.posts.map((posts, id) => {
+              if (posts.Creator_Email === firebase.auth().currentUser.email) {
+                return (
 
-                <li key={id} id={id}>
-                  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title" id="exampleModalLabel">Edit Post</h5>
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                          </button>
-                        </div>
-                        <div class="modal-body">
-                          <form>
-                            <div class="form-group w-100">
-                              <label for="Post_Title">Post Title</label>
-                              <input type="text" class="form-control" name="Post_Title" id="Post_Title" aria-describedby="Post_Title" value={this.state.posts_name} onChange={this.onInputchange} placeholder="Enter Post Title" />
-                            </div>
-                            <div class="form-group w-100">
-                              <label for="exampleInputPassword1">Post Content</label>
-                              <textarea type="text" class="form-control" name="Post_Content" id="exampleInputPasswrd1" value={this.state.posts_content}
-                                onChange={this.onInputchange} style={{ resize: 'none', height: '158px' }} placeholder="Enter Post Content" />
-                            </div>
-                            <div class="input-group mb-3 w-100">
-                              <div class="input-group-prepend">
-                                <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
+                  <li key={id} id={id} >
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Edit Post</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            <form>
+                              <div class="form-group w-100">
+                                <label for="Post_Title">Post Title</label>
+                                <input type="text" class="form-control" name="Post_Title" id="Post_Title" aria-describedby="Post_Title" value={this.state.posts_name} onChange={this.onInputchange} placeholder="Enter Post Title" />
                               </div>
-                              <div class="custom-file">
-                                <input type="file" name="Post_Image_Url" onChange={this.handleChange} class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" />
-                                <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                              <div class="form-group w-100">
+                                <label for="exampleInputPassword1">Post Content</label>
+                                <textarea type="text" class="form-control" name="Post_Content" id="exampleInputPasswrd1" value={this.state.posts_content}
+                                  onChange={this.onInputchange} style={{ resize: 'none', height: '158px' }} placeholder="Enter Post Content" />
                               </div>
-                            </div>
-                            <div class="modal-footer">
-                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                              <button type="submit" onClick={this.onSubmitForm} class="btn btn-primary">Save changes</button>
-                            </div>
-                          </form>
+                              <div class="input-group mb-3 w-100">
+                                <div class="input-group-prepend">
+                                  <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
+                                </div>
+                                <div class="custom-file">
+                                  <input type="file" name="Post_Image_Url" onChange={this.handleChange} class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" />
+                                  <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                                </div>
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" onClick={this.onSubmitForm} class="btn btn-primary">Save changes</button>
+                              </div>
+                            </form>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="container">
-                    <div className="row">
-                      <div className="col">
-                        <span align="right">Created <TimeAgo
-                          datetime={posts.timeM}
-                          live="true"
-                        /></span>
-                      </div>
-                    </div>
-                    <div className="row">
-                      <div className="col">
-                        <p><Gravatar username={posts.Creator_Username} email={posts.Creator_Email} style={{ borderRadius: '50px' }} />  {posts.Creator_Username}</p>
-                      </div>
-                    </div>
-                    <div className="row">
-                      <div className="col text-truncate">
-                        <div className="container-fluid title">
-                          <h3 className="text-sm-justify">{posts.Post_Title}</h3>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="row">
-                      <div className="col">
-                        <h6>{posts.Post_Content}</h6>
                       </div>
                     </div>
                     <div className="container">
+                      <div className="row">
+                        <div className="col">
+                          <span align="right">Created <TimeAgo
+                            datetime={posts.timeM}
+                            live="true"
+                          /></span>
+                        </div>
+                      </div>
+                      <div className="row">
+                        <div className="col">
+                          <p><Gravatar username={posts.Creator_Username} email={posts.Creator_Email} style={{ borderRadius: '50px' }} />  {posts.Creator_Username}</p>
+                        </div>
+                      </div>
+                      <div className="row">
+                        <div className="col text-truncate">
+                          <div className="container-fluid title">
+                            <h3 className="text-sm-justify">{posts.Post_Title}</h3>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="row">
+                        <div className="col">
+                          <h6>{posts.Post_Content}</h6>
+                        </div>
+                      </div>
+                      <div className="container">
+                        <img id="image" src={posts.Post_Image_Url} draggable="false" />
+                      </div>
+                      <hr />
+                      <div style={{ display: 'flex' }}>
+                        <button className="btn btn-primary" type="button" data-toggle="modal" data-target="#exampleModal">Edit</button>
+                        <hr />
+                        <button className="btn btn-danger" name={this.state.posts} onClick={(e) => this.deleteRow(e, id)} >Delete</button>
+                      </div>
+                    </div>
+                  </li>
+                )
+              }
+              else {
+                return (
+                  <li key={id} id={id}>
+                    <span align="right">Created <TimeAgo
+                      datetime={posts.timeM}
+                      live="true"
+                    /></span>
+                    <p><Gravatar username={posts.Creator_Username} email={posts.Creator_Email} style={{ borderRadius: '50px' }} />  {posts.Creator_Username}</p>
+                    <h3>{posts.Post_Title}</h3>
+                    <h6>{posts.Post_Content}</h6>
+                    <div className="container">
                       <img id="image" src={posts.Post_Image_Url} draggable="false" />
                     </div>
-                    <hr />
-                    <div style={{ display: 'flex' }}>
-                      <button className="btn btn-primary" type="button" data-toggle="modal" data-target="#exampleModal">Edit</button>
-                      <hr />
-                      <button className="btn btn-danger" name={this.state.posts} onClick={(e) => this.deleteRow(e, id)} >Delete</button>
-                    </div>
-                  </div>
-                </li>
-              )
-            }
-            else {
-              return (
-                <li key={id} id={id}>
-                  <span align="right">Created <TimeAgo
-                    datetime={posts.timeM}
-                    live="true"
-                  /></span>
-                  <p><Gravatar username={posts.Creator_Username} email={posts.Creator_Email} style={{ borderRadius: '50px' }} />  {posts.Creator_Username}</p>
-                  <h3>{posts.Post_Title}</h3>
-                  <h6>{posts.Post_Content}</h6>
-                  <div className="container">
-                    <img id="image" src={posts.Post_Image_Url} draggable="false" />
-                  </div>
-                </li>
-              )
-            }
-            if (posts > 0) {
-              return (
-                <h1>No Posts. Create a post to get started</h1>
-              )
-            }
-          })}
-        </ul>
+                  </li>
+                )
+              }
+              if (posts > 0) {
+                return (
+                  <h1>No Posts. Create a post to get started</h1>
+                )
+              }
+            })}
+          </ul>
+        </div>
       </div>
     );
   }

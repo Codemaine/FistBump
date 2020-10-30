@@ -25,13 +25,13 @@ textarea:active {
   padding: 0; /* Remove padding */
   margin: 24px; /* Remove margins */
   border-radius: 10px;
-  overflow: scroll;
 }
 
 .posts li {
   box-shadow: -9px 8px 15px black;
   margin: 20px;
   padding: 5vh;
+  overflow: scroll;
 }
 
 
@@ -46,8 +46,9 @@ textarea:active {
 }
 
 .posts h3 {
-  padding-top: 70px;
-  padding-right: 150px;
+  padding-bottom: -70px;
+  padding-left: -150px;
+  overflow: scroll;
 }
 
 
