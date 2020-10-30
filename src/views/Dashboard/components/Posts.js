@@ -148,7 +148,7 @@ class SimpleForm extends Component {
                   <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
                 </div>
                 <div class="custom-file">
-                  <input type="file" name="Post_Image_Url" onChange={this.handleChange} class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" />
+                  <input type="file" name="Post_Image_Url" accept="image/*" onChange={this.handleChange} class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" />
                   <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
                 </div>
               </div>
@@ -226,7 +226,7 @@ class SimpleForm extends Component {
                         </div>
                       </div>
                       <div className="container">
-                        <img id="image" src={posts.Post_Image_Url} draggable="false" />
+                        <img id="image" src={posts.Post_Image_Url} className="img-fluid" draggable="false" />
                       </div>
                       <hr />
                       <div style={{ display: 'flex' }}>

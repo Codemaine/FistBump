@@ -57,7 +57,7 @@ const Navbar = () => {
     }
 
     return (
-        <div>
+        <div className="container-fullwidth">
             <nav className="navbar d-flex justify-content-between navbar-expand-lg navbar-light scrolling-navbar fixed" style={{ backgroundColor: '#cccccc' }}>
                 <div className="navabr-brand" style={{ display: 'flex' }}>
                     <img src="https://i.ibb.co/8Nyq7r8/n8pk9u-X-removebg-preview.png" />
@@ -69,13 +69,12 @@ const Navbar = () => {
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul className="navbar-nav mx-auto">
                         <li className="nav-item">
-                            <div className="mx-auto" style={{ paddingTop: '20px', display: 'flex' }} >
-                                <div className="form-group has-search">
-                                    <span className="fa fa-search form-control-feedback"></span>
-                                    <input type="text" list="list" autoComplete="off" className="form-control search-input w-100 " placeholder="Search" />
-                                    <datalist id="list">
-                                        <option value="Jermaine" >Jermaine</option>
-                                    </datalist>
+                            <div className="container">
+                                <div className="mx-auto" style={{ paddingTop: '20px', display: 'flex' }} >
+                                    <div className="form-group has-search">
+                                        <span className="fa fa-search form-control-feedback"></span>
+                                        <input type="text" list="list" autoComplete="off" className="form-control search-input w-100 " placeholder="Search" />
+                                    </div>
                                 </div>
                             </div>
                         </li>
@@ -85,17 +84,19 @@ const Navbar = () => {
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul className="navbar-nav ml-auto">
                         <li className="nav-item dropdown">
-                            <a style={{ display: 'flex' }} className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <p style={{ paddingTop: '10px', paddingLeft: '4px' }}>{Name}</p> <span style={{ paddingTop: '10px' }} className="material-icons">
-                                    keyboard_arrow_down
-</span>
-                            </a>
                             <div className="container">
-                                <div className="dropdown-menu" style={{ position: 'absolute' }} aria-labelledby="navbarDropdown">
-                                    <a className="dropdown-item" href="#" style={{ display: 'inline-flex' }}><span className="material-icons">account_circle</span> My Profile</a>
-                                    <a className="dropdown-item" href="#" style={{ display: 'inline-flex' }}><span className="material-icons">settings</span> Settings</a>
-                                    <div className="dropdown-divider"></div>
-                                    <a className="dropdown-item" href="#" style={{ display: 'inline-flex' }} onClick={handleClick}><span className="material-icons">exit_to_app</span> Logout</a>
+                                <a style={{ display: 'flex' }} className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <p style={{ paddingTop: '10px', paddingLeft: '4px' }}>{Name}</p> <span style={{ paddingTop: '10px' }} className="material-icons">
+                                        keyboard_arrow_down
+</span>
+                                </a>
+                                <div className="container">
+                                    <div className="dropdown-menu" style={{ position: 'absolute' }} aria-labelledby="navbarDropdown">
+                                        <a className="dropdown-item" href="#" style={{ display: 'inline-flex' }}><span className="material-icons">account_circle</span> My Profile</a>
+                                        <a className="dropdown-item" href="#" style={{ display: 'inline-flex' }}><span className="material-icons">settings</span> Settings</a>
+                                        <div className="dropdown-divider"></div>
+                                        <a className="dropdown-item" href="#" style={{ display: 'inline-flex' }} onClick={handleClick}><span className="material-icons">exit_to_app</span> Logout</a>
+                                    </div>
                                 </div>
                             </div>
                         </li>
