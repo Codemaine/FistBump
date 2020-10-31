@@ -31,6 +31,7 @@
     "react-online-status": "^0.1.0",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.0",
+    "react-search-box": "^2.0.2",
     "react-time-ago": "^6.2.0",
     "react-typetool": "^2.0.3",
     "sweetalert2": "^10.8.1",

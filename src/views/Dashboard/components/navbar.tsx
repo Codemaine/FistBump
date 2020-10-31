@@ -4,6 +4,7 @@ import 'firebase/firestore'
 import { useHistory } from "react-router-dom";
 import Swal from 'sweetalert2/dist/sweetalert2.js'
 import { Modal, Button, Toast } from 'react-bootstrap';
+import Search from './Searchfield';
 
 
 
@@ -88,8 +89,16 @@ const Navbar = () => {
 
     }
 
-    const handleChange = (e: any) => {
+    const handleNameChange = (e: any) => {
+        setNewName(e.target.value)
+    }
 
+    const handleUserChange = (e: any) => {
+        setNewUsername(e.target.value)
+    }
+
+    const handlePassChange = (e: any) => {
+        setNewPass(e.target.value)
     }
 
     const handleClick = (event: any) => {
@@ -131,11 +140,11 @@ const Navbar = () => {
                     <form>
                         <div className="form-group w-100">
                             <label htmlFor="name">Name:</label>
-                            <input className="form-control" id="name" onChange={event => setNewName(event.target.value)} type="text" value={NewName} />
+                            <input className="form-control" id="name" onChange={handleNameChange} type="text" value={NewName} />
                         </div>
                         <div className="form-group w-100">
                             <label htmlFor="username">Username</label>
-                            <input className="form-control" autoComplete="off" onChange={event => setNewUsername(event.target.value)} id="username" type="username" value={NewUser} />
+                            <input className="form-control" autoComplete="off" onChange={handleUserChange} id="username" type="username" value={NewUser} />
                         </div>
                         <div className="form-group w-100">
                             <label htmlFor="email">Email address</label>
@@ -143,7 +152,7 @@ const Navbar = () => {
                         </div>
                         <div className="form-group w-100">
                             <label htmlFor="exampleInputPassword1">Password</label>
-                            <input type="password" onChange={event => setNewPass(event.target.value)} className="form-control" value={NewPass} id="exampleInputPassword1" />
+                            <input type="password" onChange={handlePassChange} className="form-control" value={NewPass} id="exampleInputPassword1" />
                             <small className="form-text text-muted">To change your Profile Picture, go to <a href="https://gravatar.com" className="text-decoration-none">gravatar.com</a></small>
                         </div>
                         <div className="form-group form-check w-100">
@@ -216,10 +225,7 @@ const Navbar = () => {
                         <li className="nav-item">
                             <div className="container">
                                 <div className="mx-auto" style={{ paddingTop: '20px', display: 'flex' }} >
-                                    <div className="form-group has-search">
-                                        <span className="fa fa-search form-control-feedback"></span>
-                                        <input type="text" list="list" autoComplete="off" className="form-control search-input w-100 " placeholder="Search" />
-                                    </div>
+                                    <Search />
                                 </div>
                             </div>
                         </li>
