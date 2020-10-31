@@ -82,6 +82,10 @@ const Login = () => {
         history.push("/dashboard");
     }
 
+    const forgot_pass = () => {
+        history.push('/auth/forgot-password')
+    }
+
     const handleClick = () => {
         history.push("/auth/signup")
     }
@@ -190,6 +194,7 @@ const Login = () => {
                 <input type="password" id="validationCustom02" className="form-control was-validated" placeholder="Password" value={values.password} name="password" onChange={handleChange} required />
                 <p style={{ color: 'red' }} id="error"></p>
                 <button className="btn btn-lg btn-primary btn-block" type="submit" >Sign in</button>
+                <p className="mt-5 mb-3"><a style={{ color: '#660099', cursor: 'pointer' }} onClick={forgot_pass}>Forgot password.</a></p>
                 <p className="mt-5 mb-3">New to Fistbump? <a style={{ color: '#660099', cursor: 'pointer' }} onClick={handleClick}>Create an account.</a></p>
             </form>
         </div>

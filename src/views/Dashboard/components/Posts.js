@@ -216,13 +216,15 @@ class SimpleForm extends Component {
                       <div className="row">
                         <div className="col text-truncate">
                           <div className="container-fluid title">
-                            <h3 className="text-sm-justify">{posts.Post_Title}</h3>
+                            <h3 className="text-sm-justify text-wrap">{posts.Post_Title}</h3>
                           </div>
                         </div>
                       </div>
                       <div className="row">
                         <div className="col">
-                          <h6>{posts.Post_Content}</h6>
+                          <div>
+                            <h6 className="text-sm-justify text-break text-capitalize">{posts.Post_Content}</h6>
+                          </div>
                         </div>
                       </div>
                       <div className="container">
@@ -240,16 +242,76 @@ class SimpleForm extends Component {
               }
               else {
                 return (
-                  <li key={id} id={id}>
-                    <span align="right">Created <TimeAgo
-                      datetime={posts.timeM}
-                      live="true"
-                    /></span>
-                    <p><Gravatar username={posts.Creator_Username} email={posts.Creator_Email} style={{ borderRadius: '50px' }} />  {posts.Creator_Username}</p>
-                    <h3>{posts.Post_Title}</h3>
-                    <h6>{posts.Post_Content}</h6>
+                  <li key={id} id={id} >
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Edit Post</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            <form>
+                              <div class="form-group w-100">
+                                <label for="Post_Title">Post Title</label>
+                                <input type="text" class="form-control" name="Post_Title" id="Post_Title" aria-describedby="Post_Title" value={this.state.posts_name} onChange={this.onInputchange} placeholder="Enter Post Title" />
+                              </div>
+                              <div class="form-group w-100">
+                                <label for="exampleInputPassword1">Post Content</label>
+                                <textarea type="text" class="form-control" name="Post_Content" id="exampleInputPasswrd1" value={this.state.posts_content}
+                                  onChange={this.onInputchange} style={{ resize: 'none', height: '158px' }} placeholder="Enter Post Content" />
+                              </div>
+                              <div class="input-group mb-3 w-100">
+                                <div class="input-group-prepend">
+                                  <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
+                                </div>
+                                <div class="custom-file">
+                                  <input type="file" name="Post_Image_Url" onChange={this.handleChange} class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" />
+                                  <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                                </div>
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" onClick={this.onSubmitForm} class="btn btn-primary">Save changes</button>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                     <div className="container">
-                      <img id="image" src={posts.Post_Image_Url} draggable="false" />
+                      <div className="row">
+                        <div className="col">
+                          <span align="right">Created <TimeAgo
+                            datetime={posts.timeM}
+                            live="true"
+                          /></span>
+                        </div>
+                      </div>
+                      <div className="row">
+                        <div className="col">
+                          <p><Gravatar username={posts.Creator_Username} email={posts.Creator_Email} style={{ borderRadius: '50px' }} />  {posts.Creator_Username}</p>
+                        </div>
+                      </div>
+                      <div className="row">
+                        <div className="col text-truncate">
+                          <div className="container-fluid title">
+                            <h3 className="text-sm-justify text-wrap text-capitalize">{posts.Post_Title}</h3>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="row">
+                        <div className="col">
+                          <div>
+                            <h6 className="text-sm-justify text-break">{posts.Post_Content}</h6>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="container">
+                        <img id="image" src={posts.Post_Image_Url} className="img-fluid" draggable="false" />
+                      </div>
                     </div>
                   </li>
                 )
