@@ -54,7 +54,7 @@ const Navbar = () => {
                     displayName: NewName,
                 })
                     .then(function () {
-                        user!.updatePassword(NewPass).then(function () {
+                        user!.updatePassword(NewPass!).then(function () {
                             // Update successful.
                             setShow(false)
                             console.log('Success')
