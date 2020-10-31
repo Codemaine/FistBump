@@ -5,12 +5,7 @@ import { useHistory } from "react-router-dom";
 import Swal from 'sweetalert2/dist/sweetalert2.js'
 import { Modal, Button, Toast } from 'react-bootstrap';
 
-interface UserData {
-    userName: string;
-    Name: string;
-    NewUser: string;
-    Email: null;
-}
+
 
 const Navbar = () => {
     const [userName, setUsername] = useState();
@@ -37,7 +32,7 @@ const Navbar = () => {
                 if (user) {
                     setUsername(user['username'])
                     setUserName(user['name'])
-                    setUserEmail(firebase.auth().currentUser?.email)
+                    setUserEmail(user['email'])
                     console.log(Email)
 
                 }
