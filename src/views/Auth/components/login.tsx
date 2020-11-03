@@ -79,15 +79,15 @@ const Login = () => {
 
 
     const redirectToTargetPage = () => {
-        history.push("/dashboard");
+        history.push("/");
     }
 
     const forgot_pass = () => {
-        history.push('/auth/forgot-password')
+        history.push('/forgot-password')
     }
 
     const handleClick = () => {
-        history.push("/auth/signup")
+        history.push("/signup")
     }
 
     const handleChange = (event: any) => {
@@ -107,7 +107,7 @@ const Login = () => {
             .then(res => {
                 authContext.setUser(res);
                 console.log(res, 'res')
-                history.push("/dashboard");
+                history.push("/");
             })
             .catch(error => {
                 console.log(error.message);
@@ -183,21 +183,53 @@ const Login = () => {
 
 
     return (
-        <div style={{ textAlign: 'center' }}>
-            <link rel="stylesheet" href='https://googledrive.com/host/1CCwkBmsaAppGwnuvwGKAP90-UdjqECZ4' />
-            <form className="form-signin needs-validation" noValidate onSubmit={handleSubmit}>
-                <img className="mb-4" src="https://i.ibb.co/8Nyq7r8/n8pk9u-X-removebg-preview.png" alt="" width={72} height={72} />
-                <h1 className="h3 mb-3 font-weight-normal">Login</h1>
-                <label htmlFor="validationCustom01" className="sr-only">Email address</label>
-                <input type="email" id="validationCustom01" className="form-control was-validated" name="email" value={values.email} placeholder="Email address" onChange={handleChange} required />
-                <label htmlFor="validationCustom02" className="sr-only">Password</label>
-                <input type="password" id="validationCustom02" className="form-control was-validated" placeholder="Password" value={values.password} name="password" onChange={handleChange} required />
-                <p style={{ color: 'red' }} id="error"></p>
-                <button className="btn btn-lg btn-primary btn-block" type="submit" >Sign in</button>
-                <p className="mt-5 mb-3"><a style={{ color: '#660099', cursor: 'pointer' }} onClick={forgot_pass}>Forgot password.</a></p>
-                <p className="mt-5 mb-3">New to Fistbump? <a style={{ color: '#660099', cursor: 'pointer' }} onClick={handleClick}>Create an account.</a></p>
-            </form>
+        <div style={{ position: 'absolute', top: '50%', right: '50%', transform: 'translate(50%, -50%)' }}>
+            {/*
+  Tailwind UI components require Tailwind CSS v1.8 and the @tailwindcss/ui plugin.
+  Read the documentation to get started: https://tailwindui.com/documentation
+*/}
+            <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+                <div className="max-w-md w-full">
+                    <div>
+                        <img className="mx-auto h-12 w-auto" src="https://i.ibb.co/8Nyq7r8/n8pk9u-X-removebg-preview.png" alt="logo" />
+                        <h2 className="mt-6 text-center text-3xl leading-9 font-extrabold text-gray-900">
+                            Log In
+            </h2>
+                    </div>
+                    <form className="mt-8" onSubmit={handleSubmit}>
+                        <input type="hidden" name="remember" defaultValue="true" />
+                        <div className="rounded-md shadow-sm">
+                            <div>
+                                <input aria-label="Email address" value={values.email} name="email" type="email" className="appearance-none  rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5" onChange={handleChange} placeholder="Email address" />
+                            </div>
+                            <div className="-mt-px">
+                                <input aria-label="Password" value={values.password} name="password" type="password" className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5" onChange={handleChange} placeholder="Password" />
+                            </div>
+                        </div>
+                        <div className="mt-6 flex items-center justify-between">
+                            <div className="text-sm leading-5">
+                                <p className="text-red-600" id="error"></p>
+                                <a onClick={forgot_pass} className="font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition ease-in-out duration-150">
+                                    Forgot your password?
+                </a>
+                            </div>
+                        </div>
+                        <div className="mt-6">
+                            <button type="submit" className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out">
+                                <span className="absolute left-0 inset-y-0 flex items-center pl-3">
+                                    <svg className="h-5 w-5 text-indigo-500 group-hover:text-indigo-400 transition ease-in-out duration-150" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+                                    </svg>
+                                </span>
+                Log in
+              </button>
+                            <p className="font-xs text-center" style={{ fontSize: '12px', textAlign: 'center', width: '150px' }}>New to FistBump? <a className="text-indigo-600" onClick={handleClick} style={{ cursor: 'pointer' }}>Create an account</a></p>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
+
     );
 }
 

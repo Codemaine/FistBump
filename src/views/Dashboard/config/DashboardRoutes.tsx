@@ -6,7 +6,7 @@ import Post from '../components/PostDetails/Post'
 export const DashboardRoutes = () => {
     return (
         <Switch>
-            <Route exact path="/dashboard" component={Dashboard} />
+            <Route exact path="/" component={Dashboard} />
             <Route exact path="/posts/:id/:name/:des/:pic" component={Post} />
         </Switch>
     );

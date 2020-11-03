@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import firebase from '../../../firebase'
+import 'firebase/auth'
 import 'firebase/firestore'
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import Swal from 'sweetalert2/dist/sweetalert2.js'
-import { Modal, Button, Toast } from 'react-bootstrap';
+import { Modal, Button, Toast, NavLink } from 'react-bootstrap';
 import Search from './Searchfield';
+import Gravatar from 'react-gravatar'
 
 
 
-const Navbar = () => {
+const Navbar = (props: any) => {
     const [userName, setUsername] = useState();
     const [Name, setUserName] = useState();
     const [ProfilePic, setUserPic] = useState();
@@ -17,6 +19,8 @@ const Navbar = () => {
     const [NewName, setNewName] = useState(Name);
     const [NewPass, setNewPass] = useState();
     const [show, setShow] = useState(false);
+    const [isOpen, setOpen] = useState(false);
+    const [navbar, setNavbar] = useState(false);
     const history = useHistory();
 
     const handleClose = () => setShow(false);
@@ -89,6 +93,75 @@ const Navbar = () => {
 
     }
 
+    const Dropdown2 = () => {
+        if (navbar === true) {
+            return (<div className=" sm:hidden transform opacity-100 scale-100">
+                <div className="px-2 pt-2 pb-3">
+                    <Link to="/" className="block px-3 py-2 rounded-md text-base font-medium text-white bg-gray-900 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Home</Link>
+                    <a href="#" className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Search</a>
+                </div>
+            </div>)
+        }
+        else if (navbar === false) {
+            return (
+                <div className="hidden sm:hidden transform opacity-100 scale-100">
+                    <div className="px-2 pt-2 pb-3">
+                        <Link to="/" className="block px-3 py-2 rounded-md text-base font-medium text-white bg-gray-900 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Home</Link>
+                        <a href="#" className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Search</a>
+                    </div>
+                </div>
+            )
+        }
+        return (
+            <div></div>
+        )
+    }
+
+    const Icon = () => {
+        if (navbar === true) {
+            return (
+                <svg className="h-6 w-6 transform opacity-100 scale-100" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            )
+        } else if (navbar === false) {
+            return (<svg className="h-6 w-6 transform opacity-100 scale-100" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            </svg>)
+        }
+        return (
+            <div></div>
+        )
+    }
+
+    const Dropdown = () => {
+        if (isOpen === true) {
+            return (
+                <div className="origin-top-right transform opacity-100 scale-100 absolute right-0 mt-2 w-48 rounded-md shadow-lg">
+                    <div className="py-1 rounded-md bg-white shadow-xs" role="menu" aria-orientation="vertical" aria-labelledby="user-menu">
+                        <a href="#" className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out" role="menuitem">Your Profile</a>
+                        <a href="#" className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out" role="menuitem">Settings</a>
+                        <a href="#" className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out" role="menuitem" onClick={handleClick}>Sign out</a>
+                    </div>
+                </div>
+            )
+        }
+        else if (isOpen === false) {
+            return (
+                <div className="origin-top-right transform opacity-100 scale-100 absolute right-0 mt-2 w-48 invisible rounded-md shadow-lg">
+                    <div className="py-1 rounded-md bg-white shadow-xs" role="menu" aria-orientation="vertical" aria-labelledby="user-menu">
+                        <a href="#" className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out" role="menuitem">Your Profile</a>
+                        <a href="#" className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out" role="menuitem">Settings</a>
+                        <a href="#" className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out" role="menuitem" onClick={handleClick}>Sign out</a>
+                    </div>
+                </div>
+            )
+        }
+        return (
+            <div></div>
+        )
+    }
+
     const handleNameChange = (e: any) => {
         setNewName(e.target.value)
     }
@@ -128,132 +201,74 @@ const Navbar = () => {
             })
     }
 
+
     var email = firebase.auth().currentUser?.email;
+    var md5 = require('md5');
+    var profile_pic = 'https://gravatar.com/avatar/' + md5(email);
+    console.log(profile_pic);
 
     return (
         <div className="container-fullwidth">
-            <Modal show={show} onHide={handleClose}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Edit User</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <form>
-                        <div className="form-group w-100">
-                            <label htmlFor="name">Name:</label>
-                            <input className="form-control" id="name" onChange={handleNameChange} type="text" value={NewName} />
-                        </div>
-                        <div className="form-group w-100">
-                            <label htmlFor="username">Username</label>
-                            <input className="form-control" autoComplete="off" onChange={handleUserChange} id="username" type="username" value={NewUser} />
-                        </div>
-                        <div className="form-group w-100">
-                            <label htmlFor="email">Email address</label>
-                            <input className="form-control" id="email" type="email" value={Email} readOnly />
-                        </div>
-                        <div className="form-group w-100">
-                            <label htmlFor="exampleInputPassword1">Password</label>
-                            <input type="password" onChange={handlePassChange} className="form-control" value={NewPass} id="exampleInputPassword1" />
-                            <small className="form-text text-muted">To change your Profile Picture, go to <a href="https://gravatar.com" className="text-decoration-none">gravatar.com</a></small>
-                        </div>
-                        <div className="form-group form-check w-100">
-                            <input type="checkbox" className="form-check-input" id="exampleCheck1" />
-                            <label className="form-check-label" htmlFor="exampleCheck1">Check me out</label>
-                        </div>
-                        <Modal.Footer>
-                            <Button variant="secondary" onClick={handleClose}>
-                                Close
-          </Button>
-                            <Button variant="primary" onClick={Edit}>
-                                Save Changes
-          </Button>
-                        </Modal.Footer>
-                    </form>
-                </Modal.Body>
-            </Modal>
-            <div className="modal fade" id="editModal" tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div className="modal-dialog">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h5 className="modal-title" id="exampleModalLabel">Modal title</h5>
-                            <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">×</span>
+            {/*
+  Tailwind UI components require Tailwind CSS v1.8 and the @tailwindcss/ui plugin.
+  Read the documentation to get started: https://tailwindui.com/documentation
+*/}
+            <nav className="bg-gray-800">
+                <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+                    <div className="relative flex items-center justify-between h-16">
+                        <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
+                            {/* Mobile menu button*/}
+                            <button className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:bg-gray-700 focus:text-white transition duration-150 ease-in-out" aria-label="Main menu" onClick={() => setNavbar(!navbar)} aria-expanded="false">
+                                {/* Icon when menu is closed. */}
+                                {/*
+            Heroicon name: menu
+
+            Menu open: "hidden", Menu closed: "block"
+          */}
+                                <Icon />
                             </button>
                         </div>
-                        <div className="modal-body">
-                            <form onSubmit={Edit}>
-                                <div className="form-group w-100">
-                                    <label htmlFor="name">Name:</label>
-                                    <input className="form-control" id="name" type="text" value={NewName} />
+                        <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
+                            <div className="flex-shrink-0">
+                                <img className="block lg:hidden mt-0 h-8 w-auto" src="https://i.ibb.co/8Nyq7r8/n8pk9u-X-removebg-preview.png" alt="FistBump logo" />
+                                <img className="hidden lg:block mt-0 h-8 w-auto" src="https://i.ibb.co/8Nyq7r8/n8pk9u-X-removebg-preview.png" alt="FistBump logo" />
+                            </div>
+                            <div className="hidden sm:block sm:ml-6 mx-auto">
+                                <div className="flex">
+                                    <a href="#" className="px-3 py-2 rounded-md text-sm font-medium leading-5 text-white bg-gray-900 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Home</a>
+                                    <a href="#" className="ml-4 px-3 py-2 rounded-md text-sm font-medium leading-5 text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Search</a>
                                 </div>
-                                <div className="form-group w-100">
-                                    <label htmlFor="username">Username</label>
-                                    <input className="form-control" id="username" type="text" value={NewUser} />
+                            </div>
+                        </div>
+                        <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+                            {/* Profile dropdown */}
+                            <div className="ml-3 relative">
+                                <div>
+                                    <button className="flex text-sm border-2 border-transparent focus:outline-none transition duration-150 ease-in-out visible" id="user-menu" onClick={() => setOpen(!isOpen)} aria-label="User menu" aria-haspopup="true">
+                                        <img className="h-8 w-8 rounded-full" src={profile_pic} alt="" />
+                                    </button>
                                 </div>
-                                <div className="form-group w-100">
-                                    <label htmlFor="email">Email address</label>
-                                    <input className="form-control" id="email" type="email" placeholder={Email} readOnly />
-                                </div>
-                                <div className="form-group w-100">
-                                    <label htmlFor="exampleInputPassword1">Password</label>
-                                    <input type="password" className="form-control" id="exampleInputPassword1" />
-                                    <small className="form-text text-muted">To change your Profile Picture, go to <a href="https://gravatar.com" className="text-decoration-none">gravatar.com</a></small>
-                                </div>
-                                <div className="form-group form-check w-100">
-                                    <input type="checkbox" className="form-check-input" id="exampleCheck1" />
-                                    <label className="form-check-label" htmlFor="exampleCheck1">Check me out</label>
-                                </div>
-                                <div className="modal-footer">
-                                    <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    <button type="submit" className="btn btn-primary">Save changes</button>
-                                </div>
-                            </form>
+                                {/*
+            Profile dropdown panel, show/hide based on dropdown state.
 
+            Entering: "transition ease-out duration-100"
+              From: "transform opacity-0 scale-95"
+              To: "transform opacity-100 scale-100"
+            Leaving: "transition ease-in duration-75"
+              From: "transform opacity-100 scale-100"
+              To: "transform opacity-0 scale-95"
+          */}
+                                <Dropdown />
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <nav className="navbar d-flex justify-content-between navbar-expand-lg navbar-light scrolling-navbar fixed" style={{ backgroundColor: '#cccccc' }}>
-                <div className="navabr-brand" style={{ display: 'flex' }}>
-                    <img src="https://i.ibb.co/8Nyq7r8/n8pk9u-X-removebg-preview.png" />
-                    <a className="navbar-brand" href="#" style={{ paddingTop: '29px', paddingLeft: '5px' }}>FistBump</a>
-                </div>
-                <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span className="navbar-toggler-icon" />
-                </button>
-                <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul className="navbar-nav mx-auto">
-                        <li className="nav-item">
-                            <div className="container">
-                                <div className="mx-auto" style={{ paddingTop: '20px', display: 'flex' }} >
-                                    <Search />
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
+                {/*
+    Mobile menu, toggle classes based on menu state.
 
-                </div>
-                <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul className="navbar-nav ml-auto">
-                        <li className="nav-item dropdown">
-                            <div className="container">
-                                <a style={{ display: 'flex' }} className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <p style={{ paddingTop: '10px', paddingLeft: '4px' }}>{Name}</p> <span style={{ paddingTop: '10px' }} className="material-icons">
-                                        keyboard_arrow_down
-</span>
-                                </a>
-                                <div className="container">
-                                    <div className="dropdown-menu" style={{ position: 'absolute' }} aria-labelledby="navbarDropdown">
-                                        <a className="dropdown-item" href="#" style={{ display: 'inline-flex' }}><span className="material-icons">account_circle</span> My Profile</a>
-                                        <a className="dropdown-item" href="#" onClick={handleShow} style={{ display: 'inline-flex' }}><span className="material-icons">settings</span> Settings</a>
-                                        <div className="dropdown-divider"></div>
-                                        <a className="dropdown-item" href="#" style={{ display: 'inline-flex' }} onClick={handleClick}><span className="material-icons">exit_to_app</span> Logout</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-
-                </div>
+    Menu open: "block", Menu closed: "hidden"
+  */}
+                <Dropdown2 />
             </nav>
 
         </div>

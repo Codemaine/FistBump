@@ -9,10 +9,9 @@ const ApplicationRoutes = () => {
     return (
         <Router>
             <Switch>
-                <PrivateRoute exact path="/dashboard" component={DashboardRoutes} />
+                <PrivateRoute exact path="/" component={DashboardRoutes} />
                 <PrivateRoute path="/posts/:id/:name/:des/:pic" component={DashboardRoutes} />
-                <Route path="/auth" component={AuthRoutes} />
-                <Redirect to="/auth" from="/" />
+                <Route path="/" component={AuthRoutes} />
                 {/* <Route path="/" component={AuthRoutes} /> */}
             </Switch>
         </Router>

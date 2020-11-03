@@ -85,23 +85,8 @@ const Dashboard = () => {
 
   return (
     <div style={{ textAlign: 'center', width: '100vw', height: '100vh' }}>
-      <div className="modal fade" id="createModal">
-        <div className="modal-dialog">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title" id="exampleModalLabel">Edit your Post</h5>
-              <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div className="modal-body">
-
-            </div>
-          </div>
-        </div>
-      </div>
       <Offline />
-      <Navbar />
+      <Navbar name={Name} />
       <div className="content">
         <SimpleForm username={userName} uid={firebase.auth().currentUser?.uid} modalopen={true} />
       </div>

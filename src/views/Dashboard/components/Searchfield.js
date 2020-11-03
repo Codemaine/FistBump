@@ -27,6 +27,8 @@ export default class Search extends Component {
         }
     }
 
+
+
     render() {
         return (
             <ReactSearchBox
@@ -42,6 +44,7 @@ export default class Search extends Component {
                 autocomplete="off"
                 value="Jermaine"
             />
+
         )
     }
 }
