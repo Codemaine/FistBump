@@ -11,8 +11,10 @@ export default class Search extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      users: []
+      users: [],
+      search: ''
     }
+    this.handleChange = this.handleChange.bind(this);
   }
 
 
@@ -24,6 +26,9 @@ export default class Search extends Component {
       })
   }
 
+  handleChange(event) {
+    this.setState({ search: [event.target.value] })
+  }
 
   renderUser() {
     console.clear()
@@ -37,7 +42,7 @@ export default class Search extends Component {
         <Navbar />
         <div className="p-8">
           <div className="bg-white flex items-center rounded-full shadow-xl">
-            <input className="rounded-l-full w-full py-4 px-6 text-gray-700 leading-tight focus:outline-none" id="search" autoComplete="off" type="text" placeholder="Search" />
+            <input onChange={this.handleChange} className="rounded-l-full w-full py-4 px-6 text-gray-700 leading-tight focus:outline-none" id="search" autoComplete="off" type="text" placeholder="Search" />
             <div className="p-4">
               <button className="bg-blue-500 text-white rounded-full p-2 hover:bg-blue-400 focus:outline-none w-12 h-12 flex items-center justify-center">
                 <svg width="1em" height="1em" viewBox="0 0 16 16" className="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -63,33 +68,38 @@ export default class Search extends Component {
                         <th class="px-6 py-3 bg-gray-50"></th>
                       </tr>
                     </thead>
-                    {this.state.users.map((user, id) => {
-                      return (
-                        <div>
-                          <tbody class="bg-white divide-y divide-gray-200">
-                            <tr>
-                              <td class="px-6 py-4 whitespace-no-wrap">
-                                <div class="flex items-center">
-                                  <div class="flex-shrink-0 h-10 w-10">
-                                    <Gravatar class="h-10 w-10 rounded-full" email={user.fields.email.stringValue} />
-                                  </div>
-                                  <div class="ml-4">
-                                    <div class="text-sm leading-5 font-medium text-gray-900">
-                                      {user.fields.name.stringValue}
+                    {this.state.users
+                      .filter(user => {
+                        return user.fields.name.stringValue.indexOf(this.state.search) >= 0
+
+                      })
+                      .map((user, id) => {
+                        return (
+                          <div>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                              <tr>
+                                <td class="px-6 py-4 whitespace-no-wrap">
+                                  <div class="flex items-center">
+                                    <div class="flex-shrink-0 h-10 w-10">
+                                      <Gravatar class="h-10 w-10 rounded-full" email={user.fields.email.stringValue} />
                                     </div>
-                                    <div class="text-sm leading-5 text-gray-500">
-                                      {user.fields.email.stringValue}
+                                    <div class="ml-4">
+                                      <div class="text-sm leading-5 font-medium text-gray-900">
+                                        {user.fields.name.stringValue}
+                                      </div>
+                                      <div class="text-sm leading-5 text-gray-500">
+                                        {user.fields.email.stringValue}
+                                      </div>
                                     </div>
                                   </div>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
+                                </td>
+                              </tr>
+                            </tbody>
 
 
-                        </div>
-                      )
-                    })}
+                          </div>
+                        )
+                      })}
                   </table>
                 </div>
               </div>
