@@ -89,6 +89,9 @@ const SignUp = () => {
         );
     }
 
+    console.clear()
+    console.log(`%cThis is a browser feature intended for developers. If someone told you to copy-paste something here to enable a FistBump feature or "hack" someone's account, it is a scam and will give them access to your FistBump account.`, "font-size: large");
+
     return (
         <div style={{ textAlign: 'center' }}>
             <div style={{ position: 'absolute', top: '50%', right: '50%', transform: 'translate(50%, -50%)' }}>

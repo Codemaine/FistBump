@@ -22,12 +22,12 @@ export default class Search extends Component {
       .then(users => {
         this.setState({ users: users.documents })
       })
-
   }
 
 
   renderUser() {
     console.clear()
+    console.log(`%cThis is a browser feature intended for developers. If someone told you to copy-paste something here to enable a FistBump feature or "hack" someone's account, it is a scam and will give them access to your FistBump account.`, "font-size: large");
   }
 
   render() {
