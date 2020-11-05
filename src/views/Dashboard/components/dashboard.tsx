@@ -11,6 +11,7 @@ import SimpleForm from "./Posts";
 import Navbar from './navbar'
 
 
+
 function Offline() {
 
   if (navigator.onLine) {
@@ -59,7 +60,7 @@ const Dashboard = () => {
           setUsername(user['username'])
           setUserName(user['name'])
           setUserEmail(user['Email'])
-          console.log(Email)
+
 
         }
       })
@@ -71,12 +72,10 @@ const Dashboard = () => {
   if (loadingAuthState) {
 
     return (
-      <div>
-        <div className="text-center">
-          <div className="spinner-border" style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }} role="status">
-            <span className="sr-only">Loading...</span>
-          </div>
-        </div>
+      <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }} >
+        <circle cx="50" cy="50" fill="none" stroke="#222222" stroke-width="2" r="24" stroke-dasharray="113.09733552923255 39.69911184307752">
+          <animateTransform attributeName="transform" type="rotate" repeatCount="indefinite" dur="1s" values="0 50 50;360 50 50" keyTimes="0;1"></animateTransform>
+        </circle>
       </div>
     );
   }

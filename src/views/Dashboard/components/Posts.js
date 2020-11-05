@@ -5,10 +5,11 @@ import { useHistory } from "react-router-dom";
 import Swal from 'sweetalert2'
 import Gravatar from 'react-gravatar'
 import './Posts.css'
-import TimeAgo from 'timeago-react';
+import TimeAgo from 'react-timeago';
 import PostsList from './Postlists'
 import { post } from "jquery";
 import md5 from 'md5'
+import addNotification from 'react-push-notification';
 
 
 class SimpleForm extends Component {
@@ -22,7 +23,7 @@ class SimpleForm extends Component {
           Post_Image_Url: 'https://image.shutterstock.com/image-vector/smiling-group-stick-figures-holding-260nw-1115953925.jpg',
           Creator_Email: 'jermaine.antwi@icloud.com',
           Creator_Username: 'Codemaine@234',
-          timeM: '18:14 17-10-2020',
+          timeM: 'Wed Jun 04 2020 10:22:06 GMT+0000',
           id: '34454335',
           comments: [
             {
@@ -46,7 +47,8 @@ class SimpleForm extends Component {
           Comment_Message: ''
         }
       ],
-      uploaded: false
+      uploaded: false,
+      drag: false
 
     };
     this.onInputchange = this.onInputchange.bind(this);
@@ -56,25 +58,9 @@ class SimpleForm extends Component {
 
 
 
-  handleDragEnter(e) {
-    e.preventDefault();
-    e.stopPropagation();
-  }
 
-  handleDragLeave(e) {
-    e.preventDefault();
-    e.stopPropagation();
-  }
 
-  handleDragOver(e) {
-    e.preventDefault();
-    e.stopPropagation();
-  }
 
-  handleDrop(e) {
-    e.preventDefault();
-    e.stopPropagation();
-  };
 
   onInputchange(event) {
     this.setState({
@@ -83,7 +69,10 @@ class SimpleForm extends Component {
   }
 
 
-
+  handleError(event) {
+    const img = document.getElementById('cover');
+    img.style.display = "none";
+  }
 
   handleChange(event) {
     if (event.target.files[0] != null) {
@@ -110,7 +99,63 @@ class SimpleForm extends Component {
     console.log(id)
   }
 
-
+  dropRef = React.createRef()
+  handleDrag = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+  }
+  handleDragIn = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    this.dragCounter++
+    if (e.dataTransfer.items && e.dataTransfer.items.length > 0) {
+      this.setState({ drag: true })
+    }
+  }
+  handleDragOut = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    this.dragCounter--
+    if (this.dragCounter === 0) {
+      this.setState({ drag: false })
+    }
+  }
+  handleDrop = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    this.setState({ drag: false })
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      if (e.dataTransfer.files[0].size > 10000000) {
+        Swal.fire({
+          icon: 'error',
+          title: 'The uploaded is to big!',
+          text: 'The maximum size is 10Mb!'
+        })
+      }
+      else {
+        this.setState({ uploaded: true })
+        this.setState({ Post_Image_Url: URL.createObjectURL(e.dataTransfer.files[0]) })
+        console.log(URL.createObjectURL(e.dataTransfer.files[0]))
+        console.log(e.dataTransfer.files[0])
+        // console.log(URL.createObjectURL(e.dataTransfer.files))
+        e.dataTransfer.clearData()
+      }
+    }
+  }
+  componentDidMount() {
+    let div = this.dropRef.current
+    div.addEventListener('dragenter', this.handleDragIn)
+    div.addEventListener('dragleave', this.handleDragOut)
+    div.addEventListener('dragover', this.handleDrag)
+    div.addEventListener('drop', this.handleDrop)
+  }
+  componentWillUnmount() {
+    let div = this.dropRef.current
+    div.removeEventListener('dragenter', this.handleDragIn)
+    div.removeEventListener('dragleave', this.handleDragOut)
+    div.removeEventListener('dragover', this.handleDrag)
+    div.removeEventListener('drop', this.handleDrop)
+  }
 
 
 
@@ -123,6 +168,12 @@ class SimpleForm extends Component {
     } else {
       const db = firebase.firestore();
       const uid = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+      var Message = this.props.username + " created a new Post"
+      addNotification({
+        message: Message,
+        theme: 'darkblue',
+        native: true // when using native, your OS will handle theming.
+      })
       const NewPost = {
         Post_Title: this.state.Post_Title,
         Post_Content: this.state.Post_Content,
@@ -131,6 +182,7 @@ class SimpleForm extends Component {
         Creator_Username: this.props.username,
         timeM: new Date(),
       }
+
       this.setState({
         posts: [NewPost, ...this.state.posts],
         Post_Title: '',
@@ -140,6 +192,8 @@ class SimpleForm extends Component {
         timeM: ''
       })
     }
+
+    this.setState({ uploaded: false })
     Array.from(document.querySelectorAll("input")).forEach(
       input => (input.value = "")
     );
@@ -148,22 +202,8 @@ class SimpleForm extends Component {
     );
   }
 
-  dropRef = React.createRef()
-  componentDidMount() {
-    let div = this.dropRef.current
-    div.addEventListener('dragenter', this.handleDragIn)
-    div.addEventListener('dragleave', this.handleDragOut)
-    div.addEventListener('dragover', this.handleDrag)
-    div.addEventListener('drop', this.handleDrop)
-  }
 
-  componentDidMount() {
-    let div = this.dropRef.current
-    div.addEventListener('dragenter', this.handleDragIn)
-    div.addEventListener('dragleave', this.handleDragOut)
-    div.addEventListener('dragover', this.handleDrag)
-    div.addEventListener('drop', this.handleDrop)
-  }
+
 
 
   render() {
@@ -217,14 +257,15 @@ class SimpleForm extends Component {
                               <p class="mt-1 text-sm text-gray-600">
                                 {this.state.uploaded ? (
                                   <a class="font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition duration-150 ease-in-out">
-                                    Uploaded
+                                    Uploaded{'\u00A0'}
                                   </a>
                                 ) : (
                                     <a class="font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition duration-150 ease-in-out">
-                                      Upload a file
+                                      Upload a file{'\u00A0'}
                                     </a>
                                   )}
-                                <br />
+
+                                or drag and drop
 
                               </p>
                               <p class="mt-1 text-xs text-gray-500">
@@ -281,7 +322,7 @@ class SimpleForm extends Component {
                   return (
                     <li key={id} id={id} >
                       <div class="sm:max-w-sm mb-10 lg:max-w-lg rounded overflow-hidden shadow-lg">
-                        <img class="w-full" src={posts.Post_Image_Url} alt="Sunset in the mountains" />
+                        <img class="w-full" onError={this.handleError} src={posts.Post_Image_Url} id="cover" />
                         <div class="px-6 py-4">
                           <div class="px-6 pt-4 pb-2 justify-center">
                             <div className="flex items-center">
