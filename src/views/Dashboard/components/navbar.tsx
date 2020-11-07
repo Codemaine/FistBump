@@ -204,8 +204,7 @@ const Navbar = (props: any) => {
     var email = firebase.auth().currentUser?.email;
     var md5 = require('md5');
     var profile_pic = 'https://gravatar.com/avatar/' + md5(email);
-    console.clear()
-    console.log(`%cThis is a browser feature intended for developers. If someone told you to copy-paste something here to enable a FistBump feature or "hack" someone's account, it is a scam and will give them access to your FistBump account.`, "font-size: large");
+
 
     return (
         <div className="container-fullwidth">

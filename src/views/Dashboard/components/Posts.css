@@ -1,10 +1,10 @@
 input:focus {
-  border: 1px solid #ced4da !important;
+  border: none !important;
   outline: none !important;
 }
 
 input:active {
-  border: 1px solid #ced4da !important;
+  border: none !important;
   outline: none !important;
 }
 
@@ -12,13 +12,21 @@ input:active {
   margin: 100px;
 }
 
+.textarea {
+  resize: none;
+}
+
+
 textarea:focus {
-  border: 1px solid #ced4da !important;
+  border: none !important;
 }
 
 textarea:active {
   border: 1px solid #ced4da !important;
 }
+
+
+
 
 .posts {
   list-style-type: none; /* Remove bullets */

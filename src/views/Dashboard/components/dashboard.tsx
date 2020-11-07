@@ -87,7 +87,7 @@ const Dashboard = () => {
       <Offline />
       <Navbar name={Name} />
       <div className="content">
-        <SimpleForm username={userName} uid={firebase.auth().currentUser?.uid} modalopen={true} />
+        <SimpleForm username={userName} email={Email} uid={firebase.auth().currentUser?.uid} modalopen={true} />
       </div>
     </div>
   );

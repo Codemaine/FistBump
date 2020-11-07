@@ -196,7 +196,7 @@ const Navbar = (props: any) => {
                     icon: 'success',
                     title: 'Logged out successfully'
                 })
-                history.push("/auth/login");
+                history.push("/login");
             })
     }
 

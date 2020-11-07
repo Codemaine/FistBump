@@ -1,6 +1,7 @@
 import React, { Component, useState } from "react";
 import firebase from "../../../firebase";
 import "firebase/firestore";
+import 'firebase/storage'
 import { useHistory } from "react-router-dom";
 import Swal from 'sweetalert2'
 import Gravatar from 'react-gravatar'
@@ -10,43 +11,20 @@ import PostsList from './Postlists'
 import { post } from "jquery";
 import md5 from 'md5'
 import addNotification from 'react-push-notification';
+import imgbbUploader from 'imgbb-uploader'
 
 
 class SimpleForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      posts: [
-        {
-          Post_Title: 'Welcome to FistBump',
-          Post_Content: 'hi',
-          Post_Image_Url: 'https://image.shutterstock.com/image-vector/smiling-group-stick-figures-holding-260nw-1115953925.jpg',
-          Creator_Email: 'jermaine.antwi@icloud.com',
-          Creator_Username: 'Codemaine@234',
-          timeM: 'Wed Jun 04 2020 10:22:06 GMT+0000',
-          id: '34454335',
-          comments: [
-            {
-              Commenter_Email: '',
-              Commenter_Username: '',
-              Comment_Message: ''
-            }
-          ]
-        }
-      ],
+      posts: [],
       Post_Title: '',
       Post_Content: '',
-      Post_Image_Url: '',
+      Post_Id: '',
       Creator_Email: '',
       Creator_Username: '',
       timeM: '',
-      comments: [
-        {
-          Commenter_Email: '',
-          Commenter_Username: '',
-          Comment_Message: ''
-        }
-      ],
       uploaded: false,
       drag: false
 
@@ -54,6 +32,8 @@ class SimpleForm extends Component {
     this.onInputchange = this.onInputchange.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.onSubmitForm = this.onSubmitForm.bind(this);
+    this.handleImage = this.handleImage.bind(this);
+    this.console = this.console.bind(this);
   }
 
 
@@ -76,9 +56,12 @@ class SimpleForm extends Component {
 
   handleChange(event) {
     if (event.target.files[0] != null) {
-      this.setState({ [event.target.name]: URL.createObjectURL(event.target.files[0]) });
-      this.setState({ uploaded: true })
-      console.log(URL.createObjectURL(event.target.files[0]))
+      var reader = new FileReader();
+      console.log(reader.readAsDataURL(event.target.files[0]))
+
+
+
+
     }
   }
 
@@ -99,7 +82,7 @@ class SimpleForm extends Component {
     console.log(id)
   }
 
-  dropRef = React.createRef()
+
   handleDrag = (e) => {
     e.preventDefault()
     e.stopPropagation()
@@ -134,8 +117,15 @@ class SimpleForm extends Component {
       }
       else {
         this.setState({ uploaded: true })
-        this.setState({ Post_Image_Url: URL.createObjectURL(e.dataTransfer.files[0]) })
-        console.log(URL.createObjectURL(e.dataTransfer.files[0]))
+        const file = e.dataTransfer.files
+        firebase.storage().ref('posts/' + this.state.Post_Id).put(e.dataTransfer.files[0]).then(function () {
+          console.log('succesfully uploaded')
+        }).catch(error => {
+          console.error(error.message)
+        })
+
+
+        console.log(this.state.Post_Image_Url)
         console.log(e.dataTransfer.files[0])
         // console.log(URL.createObjectURL(e.dataTransfer.files))
         e.dataTransfer.clearData()
@@ -143,21 +133,41 @@ class SimpleForm extends Component {
     }
   }
   componentDidMount() {
-    let div = this.dropRef.current
-    div.addEventListener('dragenter', this.handleDragIn)
-    div.addEventListener('dragleave', this.handleDragOut)
-    div.addEventListener('dragover', this.handleDrag)
-    div.addEventListener('drop', this.handleDrop)
+    // let div = this.dropRef.current
+    // div.addEventListener('dragenter', this.handleDragIn)
+    // div.addEventListener('dragleave', this.handleDragOut)
+    // div.addEventListener('dragover', this.handleDrag)
+    // div.addEventListener('drop', this.handleDrop)
+    const id = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    this.setState({ Post_Id: id })
+    fetch('https://firestore.googleapis.com/v1/projects/fistbump-b9aaa/databases/(default)/documents/Posts')
+      .then(res => res.json())
+      .then(users => {
+        console.log(users.documents)
+        this.setState({ posts: users.documents })
+      })
+    fetch(`https://firestore.googleapis.com/v1/projects/fistbump-b9aaa/databases/(default)/documents/Users/${firebase.auth().currentUser.uid}`)
+      .then(res => res.json())
+      .then(user => {
+        this.setState({ Creator_Username: user.fields.username.stringValue })
+        this.setState({ Creator_Email: firebase.auth().currentUser.email })
+      })
   }
   componentWillUnmount() {
-    let div = this.dropRef.current
-    div.removeEventListener('dragenter', this.handleDragIn)
-    div.removeEventListener('dragleave', this.handleDragOut)
-    div.removeEventListener('dragover', this.handleDrag)
-    div.removeEventListener('drop', this.handleDrop)
+    // let div = this.dropRef.current
+    // div.removeEventListener('dragenter', this.handleDragIn)
+    // div.removeEventListener('dragleave', this.handleDragOut)
+    // div.removeEventListener('dragover', this.handleDrag)
+    // div.removeEventListener('drop', this.handleDrop)
   }
 
-
+  handleImage = (posts) => {
+    firebase.storage().ref('posts/' + posts.fields.Post_Id.stringValue).getDownloadURL().then(imgUrl => {
+      return (
+        <img class="w-full" src={imgUrl} />
+      )
+    })
+  }
 
   onSubmitForm = (e) => {
     e.preventDefault();
@@ -168,20 +178,23 @@ class SimpleForm extends Component {
     } else {
       const db = firebase.firestore();
       const uid = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-      var Message = this.props.username + " created a new Post"
-      addNotification({
-        message: Message,
-        theme: 'darkblue',
-        native: true // when using native, your OS will handle theming.
-      })
+      const date = new Date().toString();
       const NewPost = {
         Post_Title: this.state.Post_Title,
         Post_Content: this.state.Post_Content,
-        Post_Image_Url: this.state.Post_Image_Url,
-        Creator_Email: firebase.auth().currentUser.email,
-        Creator_Username: this.props.username,
-        timeM: new Date(),
+        Creator_Email: this.state.Creator_Email,
+        Creator_Username: this.state.Creator_Username,
+        timeM: date
       }
+
+      var id = Math.random().toString(36).substr(2, 9);
+      db.collection("Posts").doc(id).set(NewPost)
+        .then(function (docRef) {
+          window.location.reload()
+        })
+        .catch(function (error) {
+
+        });
 
       this.setState({
         posts: [NewPost, ...this.state.posts],
@@ -203,8 +216,10 @@ class SimpleForm extends Component {
   }
 
 
-
-
+  console = (e) => {
+    console.clear()
+    console.log(`%cThis is a browser feature intended for developers. If someone told you to copy-paste something here to enable a FistBump feature or "hack" someone's account, it is a scam and will give them access to your FistBump account.`, "font-size: large");
+  }
 
   render() {
     const { items } = this.state;
@@ -243,7 +258,8 @@ class SimpleForm extends Component {
                       </div>
 
 
-                      <label>
+
+                      {/* <label>
                         <input type="file" onChange={this.handleChange} name="Post_Image_Url" hidden />
                         <div class="mt-6" ref={this.dropRef}>
                           <label class="block text-sm leading-5 font-medium text-gray-700">
@@ -274,7 +290,7 @@ class SimpleForm extends Component {
                             </div>
                           </div>
                         </div>
-                      </label>
+                      </label> */}
                     </div>
                     <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
                       <span class="inline-flex rounded-md shadow-sm">
@@ -288,63 +304,38 @@ class SimpleForm extends Component {
 
             </div>
           </center>
-
+          {this.console}
           <center>
             <ul className="mt-24">
               {this.state.posts.map((posts, id) => {
-                if (posts.Post_Image_Url === '') {
-                  return (
 
-                    <li key={id} id={id} >
-                      <div class="sm:max-w-sm mb-10 lg:max-w-lg rounded overflow-hidden shadow-lg">
-                        <div class="px-6 py-4">
-                          <div class="px-6 pt-4 pb-2 justify-center">
-                            <div className="flex items-center">
-                              <Gravatar className="w-10 h-10 rounded-full mr-4" email={posts.Creator_Email} username={posts.Creator_Username} />
-                              <div className="text-sm">
-                                <p className="text-gray-900 leading-none">{posts.Creator_Username}</p>
-                                <p className="text-gray-600 text-xs w-25">Created <TimeAgo date={posts.timeM} live="true" /></p>
-                              </div>
+
+
+                return (
+                  <li key={id} id={id} >
+                    <div class="sm:max-w-sm mb-10 lg:max-w-lg rounded overflow-hidden shadow-lg">
+                      <div class="px-6 py-4">
+                        <div class="px-6 pt-4 pb-2 justify-center">
+                          <div className="flex items-center">
+                            <Gravatar className="w-10 h-10 rounded-full mr-4" email={posts.fields.Creator_Email.stringValue} username={posts.fields.Creator_Username.stringValue} />
+                            <div className="text-sm">
+                              <p className="text-gray-900 leading-none">{posts.fields.Creator_Username.stringValue}</p>
+                              <p className="text-gray-600 text-xs w-25">Created <TimeAgo date={posts.fields.timeM.stringValue} live="true" /></p>
                             </div>
                           </div>
-                          <div class="font-bold text-xl mb-2 break-all">{posts.Post_Title}</div>
-                          <p class="text-gray-700 text-base break-all">
-                            {posts.Post_Content}
-                          </p>
                         </div>
+                        <div class="font-bold text-xl mb-2 break-all">{posts.fields.Post_Title.stringValue}</div>
+                        <p class="text-gray-700 text-base break-all">
+                          {posts.fields.Post_Content.stringValue}
+                        </p>
                       </div>
-
-                    </li>
-                  )
-                }
-                else {
-
-                  return (
-                    <li key={id} id={id} >
-                      <div class="sm:max-w-sm mb-10 lg:max-w-lg rounded overflow-hidden shadow-lg">
-                        <img class="w-full" onError={this.handleError} src={posts.Post_Image_Url} id="cover" />
-                        <div class="px-6 py-4">
-                          <div class="px-6 pt-4 pb-2 justify-center">
-                            <div className="flex items-center">
-                              <Gravatar className="w-10 h-10 rounded-full mr-4" email={posts.Creator_Email} username={posts.Creator_Username} />
-                              <div className="text-sm">
-                                <p className="text-gray-900 leading-none">{posts.Creator_Username}</p>
-                                <p className="text-gray-600 text-xs w-25">Created <TimeAgo date={posts.timeM} live="true" /></p>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="font-bold text-xl mb-2 break-all">{posts.Post_Title}</div>
-                          <p class="text-gray-700 text-base break-all">
-                            {posts.Post_Content}
-                          </p>
-                        </div>
-                      </div>
+                    </div>
 
 
-                    </li>
-                  )
-                }
-              })}
+                  </li>
+                )
+
+              }).reverse()}
             </ul>
           </center>
         </div>
