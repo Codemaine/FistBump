@@ -56,7 +56,11 @@ const SignUp = () => {
                     .set({
                         email: values.email,
                         username: values.username,
-                        name: values.name
+                        name: values.name,
+                        Posts: 0,
+                        Following: 0,
+                        Followers: 0,
+                        uid: userCredential.user!.uid
                     })
                     .then(() => {
                         console.log('ok');

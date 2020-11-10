@@ -12,6 +12,7 @@ import { post } from "jquery";
 import md5 from 'md5'
 import addNotification from 'react-push-notification';
 import imgbbUploader from 'imgbb-uploader'
+import Dropdown from "./dropdown";
 
 
 class SimpleForm extends Component {
@@ -152,6 +153,7 @@ class SimpleForm extends Component {
         this.setState({ Creator_Username: user.fields.username.stringValue })
         this.setState({ Creator_Email: firebase.auth().currentUser.email })
       })
+    this.state.posts.sort((a, b) => new Date(a) < new Date(b) ? 1 : -1);
   }
   componentWillUnmount() {
     // let div = this.dropRef.current
@@ -164,10 +166,11 @@ class SimpleForm extends Component {
   handleImage = (posts) => {
     firebase.storage().ref('posts/' + posts.fields.Post_Id.stringValue).getDownloadURL().then(imgUrl => {
       return (
-        <img class="w-full" src={imgUrl} />
+        <img className="w-full" src={imgUrl} />
       )
     })
   }
+
 
   onSubmitForm = (e) => {
     e.preventDefault();
@@ -184,11 +187,12 @@ class SimpleForm extends Component {
         Post_Content: this.state.Post_Content,
         Creator_Email: this.state.Creator_Email,
         Creator_Username: this.state.Creator_Username,
-        timeM: date
+        timeM: date,
+        uid: this.state.Post_Id
       }
 
       var id = Math.random().toString(36).substr(2, 9);
-      db.collection("Posts").doc(id).set(NewPost)
+      db.collection("Posts").doc(this.state.Post_Id).set(NewPost)
         .then(function (docRef) {
           window.location.reload()
         })
@@ -204,6 +208,16 @@ class SimpleForm extends Component {
         Creator_Username: '',
         timeM: ''
       })
+      var washingtonRef = db.collection("Users").doc(firebase.auth().currentUser.uid);
+      const increment = firebase.firestore.FieldValue.increment(1);
+      // Set the "capital" field of the city 'DC'
+      return washingtonRef.update({
+        Posts: increment
+      })
+        .catch(function (error) {
+          // The document probably doesn't exist.
+          console.error("Error updating document: ", error);
+        });
     }
 
     this.setState({ uploaded: false })
@@ -228,31 +242,31 @@ class SimpleForm extends Component {
       <div>
         <div>
           <center>
-            <div class="sm:w-auto" >
+            <div className="sm:w-auto" >
 
 
-              <div class="mt-10 md:mt-0 md:col-span-2 m-12">
+              <div className="mt-10 md:mt-0 md:col-span-2 m-12">
                 <form onSubmit={this.onSubmitForm}>
-                  <div class="shadow sm:rounded-md sm:overflow-hidden">
-                    <div class="px-4 py-5 bg-white sm:p-6">
-                      <div class="grid grid-cols-3 gap-6">
-                        <div class="col-span-10">
-                          <label for="company_website" class="block text-sm font-medium leading-5 text-gray-700">
+                  <div className="shadow sm:rounded-md sm:overflow-hidden">
+                    <div className="px-4 py-5 bg-white sm:p-6">
+                      <div className="grid grid-cols-3 gap-6">
+                        <div className="col-span-10">
+                          <label for="company_website" className="block text-sm font-medium leading-5 text-gray-700">
                             Post Title
                 </label>
-                          <div class="mt-1 flex w-100 rounded-md shadow-sm">
+                          <div className="mt-1 flex w-100 rounded-md shadow-sm">
 
-                            <input id="company_website" name="Post_Title" id="Post_Title" value={this.state.Posts_name} onChange={this.onInputchange} class="form-input  focus:outline-none focus:shadow-outline mt-1 block w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5" placeholder="How to cook..." />
+                            <input id="company_website" name="Post_Title" id="Post_Title" value={this.state.Posts_name} onChange={this.onInputchange} className="form-input  focus:outline-none focus:shadow-outline mt-1 block w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5" placeholder="How to cook..." />
                           </div>
                         </div>
                       </div>
 
-                      <div class="mt-6">
-                        <label for="about" class="block text-sm leading-5 font-medium text-gray-700">
+                      <div className="mt-6">
+                        <label for="about" className="block text-sm leading-5 font-medium text-gray-700">
                           Post Content
               </label>
-                        <div class="rounded-md shadow-sm">
-                          <textarea id="about" rows="3" name="Post_Content" value={this.state.posts_content} onChange={this.onInputchange} class="form-textarea focus:outline-none focus:shadow-outline mt-1 block w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5" placeholder="Well cooking isn't for babies ..."></textarea>
+                        <div className="rounded-md shadow-sm">
+                          <textarea id="about" rows="3" name="Post_Content" value={this.state.posts_content} onChange={this.onInputchange} className="form-textarea focus:outline-none focus:shadow-outline mt-1 block w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5" placeholder="Well cooking isn't for babies ..."></textarea>
                         </div>
 
                       </div>
@@ -261,22 +275,22 @@ class SimpleForm extends Component {
 
                       {/* <label>
                         <input type="file" onChange={this.handleChange} name="Post_Image_Url" hidden />
-                        <div class="mt-6" ref={this.dropRef}>
-                          <label class="block text-sm leading-5 font-medium text-gray-700">
+                        <div className="mt-6" ref={this.dropRef}>
+                          <label className="block text-sm leading-5 font-medium text-gray-700">
                             Cover photo
               </label>
-                          <div class="mt-2 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
-                            <div class="text-center">
-                              <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                          <div className="mt-2 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                            <div className="text-center">
+                              <svg className="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
                                 <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                               </svg>
-                              <p class="mt-1 text-sm text-gray-600">
+                              <p className="mt-1 text-sm text-gray-600">
                                 {this.state.uploaded ? (
-                                  <a class="font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition duration-150 ease-in-out">
+                                  <a className="font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition duration-150 ease-in-out">
                                     Uploaded{'\u00A0'}
                                   </a>
                                 ) : (
-                                    <a class="font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition duration-150 ease-in-out">
+                                    <a className="font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition duration-150 ease-in-out">
                                       Upload a file{'\u00A0'}
                                     </a>
                                   )}
@@ -284,7 +298,7 @@ class SimpleForm extends Component {
                                 or drag and drop
 
                               </p>
-                              <p class="mt-1 text-xs text-gray-500">
+                              <p className="mt-1 text-xs text-gray-500">
                                 PNG, JPG, GIF up to 10MB
                   </p>
                             </div>
@@ -292,9 +306,9 @@ class SimpleForm extends Component {
                         </div>
                       </label> */}
                     </div>
-                    <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
-                      <span class="inline-flex rounded-md shadow-sm">
-                        <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out">
+                    <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
+                      <span className="inline-flex rounded-md shadow-sm">
+                        <button type="submit" className="inline-flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out">
                           Create Post
               </button>
                       </span>
@@ -306,36 +320,76 @@ class SimpleForm extends Component {
           </center>
           {this.console}
           <center>
-            <ul className="mt-24">
-              {this.state.posts.map((posts, id) => {
+            <ul classNameName="mt-24">
+              {this.state.posts
+                .map((posts, id) => {
 
 
-
-                return (
-                  <li key={id} id={id} >
-                    <div class="sm:max-w-sm mb-10 lg:max-w-lg rounded overflow-hidden shadow-lg">
-                      <div class="px-6 py-4">
-                        <div class="px-6 pt-4 pb-2 justify-center">
-                          <div className="flex items-center">
-                            <Gravatar className="w-10 h-10 rounded-full mr-4" email={posts.fields.Creator_Email.stringValue} username={posts.fields.Creator_Username.stringValue} />
-                            <div className="text-sm">
-                              <p className="text-gray-900 leading-none">{posts.fields.Creator_Username.stringValue}</p>
-                              <p className="text-gray-600 text-xs w-25">Created <TimeAgo date={posts.fields.timeM.stringValue} live="true" /></p>
+                  if (posts.fields.Creator_Email.stringValue === firebase.auth().currentUser.email) {
+                    console.log(firebase.auth().currentUser.email)
+                    return (
+                      <li key={id} id={id} >
+                        <div className="sm:max-w-sm mb-10 lg:max-w-lg rounded shadow-lg">
+                          <div className="px-6 py-4">
+                            <div className="px-6 pt-4 pb-2 justify-center">
+                              <div className="flex justify-between container mx-auto items-center">
+                                <div class="flex items-center">
+                                  <Gravatar className="w-10 h-10 rounded-full mr-4" email={posts.fields.Creator_Email.stringValue} username={posts.fields.Creator_Username.stringValue} />
+                                  <div className="text-sm">
+                                    <p className="text-gray-900 leading-none">{posts.fields.Creator_Username.stringValue}</p>
+                                    <p className="text-gray-600 text-xs w-25">Created <TimeAgo date={posts.fields.timeM.stringValue} live="true" /></p>
+                                  </div>
+                                </div>
+                                <div class="float-right">
+                                  <div class="relative inline-block text-left">
+                                    <div>
+                                      <Dropdown postId={posts.fields.uid.stringValue} postname={posts.fields.Post_Title.stringValue} posts_content={posts.fields.Post_Content.stringValue} />
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
                             </div>
+                            <div className="font-bold text-xl mb-2 break-all">{posts.fields.Post_Title.stringValue}</div>
+                            <p className="text-gray-700 text-base break-all">
+                              {posts.fields.Post_Content.stringValue}
+                            </p>
                           </div>
                         </div>
-                        <div class="font-bold text-xl mb-2 break-all">{posts.fields.Post_Title.stringValue}</div>
-                        <p class="text-gray-700 text-base break-all">
-                          {posts.fields.Post_Content.stringValue}
-                        </p>
-                      </div>
-                    </div>
 
 
-                  </li>
-                )
+                      </li>
+                    )
+                  }
+                  else {
+                    console.log('no')
+                    return (
+                      <li key={id} id={id} >
+                        <div className="sm:max-w-sm mb-10 lg:max-w-lg rounded shadow-lg">
+                          <div className="px-6 py-4">
+                            <div className="px-6 pt-4 pb-2 justify-center">
+                              <div className="flex justify-between items-center">
+                                <div class="flex items-center">
+                                  <Gravatar className="w-10 h-10 rounded-full mr-4" email={posts.fields.Creator_Email.stringValue} username={posts.fields.Creator_Username.stringValue} />
+                                  <div className="text-sm">
+                                    <p className="text-gray-900 leading-none">{posts.fields.Creator_Username.stringValue}</p>
+                                    <p className="text-gray-600 text-xs w-25">Created <TimeAgo date={posts.fields.timeM.stringValue} live="true" /></p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="font-bold text-xl mb-2 break-all">{posts.fields.Post_Title.stringValue}</div>
+                            <p className="text-gray-700 text-base break-all">
+                              {posts.fields.Post_Content.stringValue}
+                            </p>
+                          </div>
+                        </div>
 
-              }).reverse()}
+
+                      </li>
+                    )
+                  }
+
+                }).reverse()}
             </ul>
           </center>
         </div>

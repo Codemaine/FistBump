@@ -10,7 +10,7 @@ const ApplicationRoutes = () => {
         <Router>
             <Switch>
                 <PrivateRoute exact path="/" component={DashboardRoutes} />
-                <PrivateRoute path="/posts/:id/:name/:des/:pic" component={DashboardRoutes} />
+                <PrivateRoute path="/user/:name" component={DashboardRoutes} />
                 <PrivateRoute exact path="/search" component={DashboardRoutes} />
                 <Route path="/" component={AuthRoutes} />
                 {/* <Route path="/" component={AuthRoutes} /> */}

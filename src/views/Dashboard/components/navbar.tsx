@@ -97,7 +97,7 @@ const Navbar = (props: any) => {
             return (<div className=" sm:hidden transform opacity-100 scale-100">
                 <div className="px-2 pt-2 pb-3">
                     <NavLink to="/" className="block px-3 py-2 rounded-md text-base font-medium text-white bg-gray-900 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Home</NavLink>
-                    <NavLink to="/search" className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Search</NavLink>
+                    <NavLink to="/search" className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Users</NavLink>
                 </div>
             </div>)
         }
@@ -106,7 +106,7 @@ const Navbar = (props: any) => {
                 <div className="hidden sm:hidden transform opacity-100 scale-100">
                     <div className="px-2 pt-2 pb-3">
                         <Link to="/" className="block px-3 py-2 rounded-md text-base font-medium text-white bg-gray-900 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Home</Link>
-                        <a href="#" className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Search</a>
+                        <a href="#" className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Users</a>
                     </div>
                 </div>
             )
@@ -138,7 +138,7 @@ const Navbar = (props: any) => {
             return (
                 <div className="origin-top-right transform opacity-100 scale-100 absolute right-0 mt-2 w-48 rounded-md shadow-lg">
                     <div className="py-1 rounded-md bg-white shadow-xs" role="menu" aria-orientation="vertical" aria-labelledby="user-menu">
-                        <a href="#" className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out" role="menuitem">Your Profile</a>
+                        <a href="#" className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out" onClick={() => window.open(`user/${firebase.auth().currentUser?.uid}`, '_self')} role="menuitem">Your Profile</a>
                         <a href="#" className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out" role="menuitem">Settings</a>
                         <a href="#" className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out" role="menuitem" onClick={handleClick}>Sign out</a>
                     </div>
@@ -235,7 +235,7 @@ const Navbar = (props: any) => {
                             <div className="hidden sm:block sm:ml-6 mx-auto">
                                 <div className="flex">
                                     <NavLink to="/" className="px-3 py-2 rounded-md text-sm font-medium leading-5 text-white bg-gray-900 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Home</NavLink>
-                                    <NavLink to="/search" className="ml-4 px-3 py-2 rounded-md text-sm font-medium leading-5 text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Search</NavLink>
+                                    <NavLink to="/search" className="ml-4 px-3 py-2 rounded-md text-sm font-medium leading-5 text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Users</NavLink>
                                 </div>
                             </div>
                         </div>

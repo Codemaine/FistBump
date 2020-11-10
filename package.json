@@ -5,13 +5,14 @@
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.31",
     "@fortawesome/free-solid-svg-icons": "^5.15.0",
+    "@headlessui/react": "^0.2.0",
     "@ideasio/add-to-homescreen-react": "^1.0.4",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "@types/jest": "^24.9.1",
     "@types/jquery": "^3.5.4",
-    "@types/node": "^12.12.28",
+    "@types/node": "^12.19.4",
     "@types/react": "^16.9.50",
     "@types/react-dom": "^16.9.8",
     "@types/react-gravatar": "^2.6.8",
@@ -53,9 +54,7 @@
     "typescript": "^3.7.5"
   },
   "scripts": {
-    "build:tailwind": "tailwind build src/tailwind.css -o src/tailwind.output.css",
-    "start": "npm-run-all build:tailwind --parallel start:react",
-    "start:react": "react-scripts start",
+    "start": "react-scripts start",
     "prebuild": "run-s build:tailwind",
     "build": "react-scripts build",
     "test": "react-scripts test",

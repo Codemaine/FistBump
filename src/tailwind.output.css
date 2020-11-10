@@ -8,6 +8,13 @@
  * 2. Prevent adjustments of font size after orientation changes in iOS.
  */
 
+.center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
 html {
   line-height: 1.15; /* 1 */
   -webkit-text-size-adjust: 100%; /* 2 */

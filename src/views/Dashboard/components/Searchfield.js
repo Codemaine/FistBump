@@ -6,6 +6,7 @@ import 'axios'
 import 'firebase/firestore'
 import Navbar from './searchnav.tsx'
 import Gravatar from 'react-gravatar'
+import { Link } from 'react-router-dom'
 
 export default class Search extends Component {
   constructor(props) {
@@ -84,11 +85,16 @@ export default class Search extends Component {
                                       <Gravatar class="h-10 w-10 rounded-full" email={user.fields.email.stringValue} />
                                     </div>
                                     <div class="ml-4">
-                                      <div class="text-sm leading-5 font-medium text-gray-900">
+                                      <Link to={{
+                                        pathname: `user/${user.fields.uid.stringValue}`,
+                                        state: {
+                                          user
+                                        }
+                                      }} userInfo={user} class="text-sm leading-5 font-medium text-gray-900">
                                         {user.fields.name.stringValue}
-                                      </div>
+                                      </Link>
                                       <div class="text-sm leading-5 text-gray-500">
-                                        {user.fields.email.stringValue}
+                                        {user.fields.username.stringValue}
                                       </div>
                                     </div>
                                   </div>
