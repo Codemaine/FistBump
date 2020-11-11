@@ -34,6 +34,7 @@
     "react-autosuggest": "^10.0.3",
     "react-bootstrap": "^1.4.0",
     "react-circle-gravatar": "0.0.0",
+    "react-cookie-bubble": "^1.0.3",
     "react-detect-offline": "^2.4.0",
     "react-dom": "^16.13.1",
     "react-file-base64": "^1.0.3",

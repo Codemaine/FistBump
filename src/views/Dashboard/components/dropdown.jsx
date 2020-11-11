@@ -16,13 +16,13 @@ function Dropdown(props) {
             console.log("Document successfully deleted!");
         })
         var washingtonRef = db.collection("Users").doc(firebase.auth().currentUser.uid);
-        const increment = firebase.firestore.FieldValue.increment(1);
+        const increment = firebase.firestore.FieldValue.increment(-1);
         // Set the "capital" field of the city 'DC'
         return washingtonRef.update({
             Posts: increment
         })
             .then(function () {
-                window.location.reload()
+                window.location.reload();
             });
     }
 

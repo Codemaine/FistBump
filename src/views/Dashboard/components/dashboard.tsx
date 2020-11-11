@@ -89,6 +89,7 @@ const Dashboard = () => {
       <div className="content">
         <SimpleForm username={userName} email={Email} uid={firebase.auth().currentUser?.uid} modalopen={true} />
       </div>
+
     </div>
   );
 }
