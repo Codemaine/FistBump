@@ -3,6 +3,7 @@ import { Route, Switch } from "react-router-dom";
 import { Dashboard } from "../components";
 import Post from '../components/PostDetails/Post'
 import Search from '../components/Searchfield'
+import { Settings } from "../components/Settings";
 import User from '../components/User'
 
 export const DashboardRoutes = () => {
@@ -10,6 +11,7 @@ export const DashboardRoutes = () => {
         <Switch>
             <Route exact path="/" component={Dashboard} />
             <Route exact path="/search" component={Search} />
+            <Route exact path="/settings" component={Settings} />
             <Route exact path="/user/:name" component={User} />
         </Switch>
     );

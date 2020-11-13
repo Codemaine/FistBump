@@ -11,6 +11,7 @@ const ApplicationRoutes = () => {
             <Switch>
                 <PrivateRoute exact path="/" component={DashboardRoutes} />
                 <PrivateRoute path="/user/:name" component={DashboardRoutes} />
+                <PrivateRoute path="/settings" component={DashboardRoutes} />
                 <PrivateRoute exact path="/search" component={DashboardRoutes} />
                 <Route path="/" component={AuthRoutes} />
                 {/* <Route path="/" component={AuthRoutes} /> */}

@@ -15,18 +15,14 @@ import Navbar from './navbar'
 function Offline() {
 
   if (navigator.onLine) {
-    return (
-      <div></div>
-    )
-    setTimeout(function () {
-      return <div className="bg-primary d-flex justify-content-center offline text-light" style={{ padding: '10px', display: 'none' }}>You're back online!</div>;
-    }, 1000);
-    clearInterval();
+    return <div className="bg-primary d-flex justify-content-center offline text-light" style={{ padding: '10px', display: 'none' }}>You're back online!</div>;
   } else {
     return <div className="bg-warning d-flex justify-content-center offline" style={{ padding: '10px', display: 'none' }}>You are offline. Connect to the internet to view the latests posts</div>
   }
-  window.location.reload(false);
 
+  return (
+    <div></div>
+  )
 }
 
 const Dashboard = () => {

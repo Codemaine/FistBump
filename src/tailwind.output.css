@@ -15,6 +15,11 @@
   transform: translate(-50%, -50%);
 }
 
+.center-Y {
+  margin-left: 20vw !important;
+  width: 100%;
+}
+
 html {
   line-height: 1.15; /* 1 */
   -webkit-text-size-adjust: 100%; /* 2 */
