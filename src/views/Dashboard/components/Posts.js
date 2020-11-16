@@ -178,45 +178,49 @@ class SimpleForm extends Component {
       var small = document.getElementById('Post_Title');
       small.innerHTML = 'Your Post has to have a title!'
     } else {
-      const db = firebase.firestore();
-      const uid = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-      const date = new Date().toString();
-      const NewPost = {
-        Post_Title: this.state.Post_Title,
-        Post_Content: this.state.Post_Content,
-        Creator_Email: this.state.Creator_Email,
-        Creator_Username: this.state.Creator_Username,
-        timeM: date,
-        uid: this.state.Post_Id
+      if (this.state.Post_Title.length > 25 && this.state.Post_Content.length > 25) {
+
       }
+      else {
+        const db = firebase.firestore();
+        const uid = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+        const date = new Date().toString();
+        const NewPost = {
+          Post_Title: this.state.Post_Title,
+          Post_Content: this.state.Post_Content,
+          Creator_Email: this.state.Creator_Email,
+          Creator_Username: this.state.Creator_Username,
+          timeM: date,
+          uid: this.state.Post_Id
+        }
+        var id = Math.random().toString(36).substr(2, 9);
+        db.collection("Posts").doc(this.state.Post_Id).set(NewPost)
+          .then(function (docRef) {
+            window.location.reload()
+          })
+          .catch(function (error) {
 
-      var id = Math.random().toString(36).substr(2, 9);
-      db.collection("Posts").doc(this.state.Post_Id).set(NewPost)
-        .then(function (docRef) {
-          window.location.reload()
+          });
+
+        this.setState({
+          posts: [NewPost, ...this.state.posts],
+          Post_Title: '',
+          Post_Content: '',
+          Post_Image_Url: '',
+          Creator_Username: '',
+          timeM: ''
         })
-        .catch(function (error) {
-
-        });
-
-      this.setState({
-        posts: [NewPost, ...this.state.posts],
-        Post_Title: '',
-        Post_Content: '',
-        Post_Image_Url: '',
-        Creator_Username: '',
-        timeM: ''
-      })
-      var washingtonRef = db.collection("Users").doc(firebase.auth().currentUser.uid);
-      const increment = firebase.firestore.FieldValue.increment(1);
-      // Set the "capital" field of the city 'DC'
-      return washingtonRef.update({
-        Posts: increment
-      })
-        .catch(function (error) {
-          // The document probably doesn't exist.
-          console.error("Error updating document: ", error);
-        });
+        var washingtonRef = db.collection("Users").doc(firebase.auth().currentUser.uid);
+        const increment = firebase.firestore.FieldValue.increment(1);
+        // Set the "capital" field of the city 'DC'
+        return washingtonRef.update({
+          Posts: increment
+        })
+          .catch(function (error) {
+            // The document probably doesn't exist.
+            console.error("Error updating document: ", error);
+          });
+      }
     }
 
     this.setState({ uploaded: false })
@@ -330,32 +334,34 @@ class SimpleForm extends Component {
                     console.log(firebase.auth().currentUser.email)
                     return (
                       <li key={id} id={id}>
-                        <div className="pl-64 pb-10 pr-64">
-                             <div className="bg-white p-6 rounded-lg shadow-lg">
-                               <div className="flex justify-between">
-                               <div className="flex">
-                                 <div>
-                                   <div className="w-10 h-10 bg-cover bg-center rounded-full mr-3 shadow-inner" style={{backgroundImage: `url(https://gravatar.com/avatar/${md5(firebase.auth().currentUser?.email)}})`}}>
-                                   </div>
-                                 </div>
-                                 <div>
-                                   <p className="text-gray-600 font-medium">{posts.fields.Creator_Username.stringValue}</p>
-                                   <div className="flex items-center text-center text-xs text-gray-600">
-                                     <p><TimeAgo date={posts.fields.timeM.stringValue} /></p>
-                                   </div>
-                                 </div>
-                                 </div>
-                               <div>
-                               <Dropdown postId={posts.fields.uid.stringValue} postname={posts.fields.Post_Title.stringValue} posts_content={posts.fields.Post_Content.stringValue} />
-                               </div>
-                               </div>
-                               <div className="mt-4">
-                               <h1>{posts.fields.Post_Title.stringValue}</h1>
-                                 <p className="text-gray-600 text-sm" style={{ width: '500px' }}>
-                                   {posts.fields.Post_Content.stringValue}
-                                 </p>
-                               </div>
-                         {/* <div className="mt-6 flex">
+                        <div className="lg:pl-64 pb-10 clearfix lg:pr-64">
+                          <div className="bg-white p-6 justify-fit-content rounded-lg shadow-lg" style={{ width: '50vw' }}>
+                            <div className="sm:flex sm:flex-shrink-0 justify-between">
+                              <div className="sm:flex sm:info sm:flex-shrink-0">
+                                <div>
+                                  <div className="w-10 h-10 bg-cover bg-center rounded-full mr-3 shadow-inner" style={{ backgroundImage: `url(https://gravatar.com/avatar/${md5(firebase.auth().currentUser?.email)}})` }}>
+                                  </div>
+                                </div>
+                                <div>
+                                  <p className="text-gray-600 font-medium" title={posts.fields.Creator_Username.stringValue}>{posts.fields.Creator_Username.stringValue}</p>
+                                  <div className="flex items-center text-center text-xs text-gray-600">
+                                    <center>
+                                      <p className="max-w-10 sm:text-center"><TimeAgo date={posts.fields.timeM.stringValue} className="text-center" /></p>
+                                    </center>
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="drop">
+                                <Dropdown postId={posts.fields.uid.stringValue} postname={posts.fields.Post_Title.stringValue} posts_content={posts.fields.Post_Content.stringValue} />
+                              </div>
+                            </div>
+                            <div className="mt-4">
+                              <h1>{posts.fields.Post_Title.stringValue}</h1>
+                              <p className="text-gray-600 text-sm">
+                                {posts.fields.Post_Content.stringValue}
+                              </p>
+                            </div>
+                            {/* <div className="mt-6 flex">
                            <button className="flex items-center hover:opacity-75 mr-4">
                              <i className="mr-2">
                                <svg className="fill-current text-blue-500 w-6 h-6" height={512} viewBox="0 0 16 16" width={512}>
@@ -395,8 +401,8 @@ class SimpleForm extends Component {
                              </button>
                            </div>
                          </div> */}
-                             </div>
-                           </div>
+                          </div>
+                        </div>
                       </li>
                     )
                   }

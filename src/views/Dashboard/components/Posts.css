@@ -63,8 +63,26 @@ textarea:active {
   overflow: scroll;
 }
 
+.info {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
 
+.drop{
+  display: none;
+}
 
+.text-center {
+   width: fit-content;
+   margin: 0 auto;
+}
+
+@media (min-width: 640px) { 
+  .drop{
+    display: block;
+  }
+ }
 
 
 

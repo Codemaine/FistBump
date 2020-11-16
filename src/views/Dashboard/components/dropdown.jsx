@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import firebase from "../../../firebase"
 import "firebase/firestore"
 import Editform from './Editform';
@@ -25,6 +25,20 @@ function Dropdown(props) {
                 window.location.reload();
             });
     }
+
+    async function fetchData() {
+        const res = await fetch(`https://firestore.googleapis.com/v1/projects/fistbump-b9aaa/databases/(default)/documents/Posts/${props.postId}`);
+        res
+            .json()
+            .then(res => {
+                setName(res.fields.Post_Title.stringValue)
+                setInfo(res.fields.Post_Content.stringValue)
+            })
+    }
+
+    useEffect(() => {
+        fetchData();
+    }, []);
 
     const Drop = (e) => {
         if (open === true) {
