@@ -38,7 +38,7 @@ const Navbar = (props: any) => {
                     setUsername(user['username'])
                     setUserName(user['name'])
                     setUserEmail(user['email'])
-
+                    setUserPic(user['Profile_Pic'])
                 }
             })
     });
@@ -95,11 +95,11 @@ const Navbar = (props: any) => {
     const Dropdown2 = () => {
         if (navbar === true) {
             return (<div className=" sm:hidden transform opacity-100 scale-100">
-            <div className="px-2 pt-2 pb-3">
-                <Link to="/" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Home</Link>
-                <a href="#" className="block px-3 py-2 rounded-md text-base font-medium text-white bg-gray-900 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Settings</a>
-                <Link to="/search" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Users</Link>
-          </div>
+                <div className="px-2 pt-2 pb-3">
+                    <Link to="/" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Home</Link>
+                    <a href="#" className="block px-3 py-2 rounded-md text-base font-medium text-white bg-gray-900 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Settings</a>
+                    <Link to="/search" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Users</Link>
+                </div>
             </div>)
         }
         else if (navbar === false) {
@@ -139,7 +139,7 @@ const Navbar = (props: any) => {
             return (
                 <div className="origin-top-right transform opacity-100 scale-100 absolute right-0 mt-2 w-48 rounded-md shadow-lg">
                     <div className="py-1 rounded-md bg-white shadow-xs" role="menu" aria-orientation="vertical" aria-labelledby="user-menu">
-                        <Link to={'/user/'+firebase.auth().currentUser!.uid} className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out" role="menuitem">Your Profile</Link>
+                        <Link to={'/user/' + firebase.auth().currentUser!.uid} className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out" role="menuitem">Your Profile</Link>
                         <Link to="/settings" className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out" role="menuitem">Settings</Link>
                         <a href="#" className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out" role="menuitem" onClick={handleClick}>Sign out</a>
                     </div>
@@ -247,7 +247,7 @@ const Navbar = (props: any) => {
                             <div className="ml-3 relative">
                                 <div>
                                     <button className="flex text-sm border-2 border-transparent focus:outline-none transition duration-150 ease-in-out visible" id="user-menu" onClick={() => setOpen(!isOpen)} aria-label="User menu" aria-haspopup="true">
-                                        <img className="h-8 w-8 rounded-full" src={profile_pic} alt="" />
+                                        <img className="h-8 w-8 rounded-full" src={ProfilePic} alt="" />
                                     </button>
                                 </div>
                                 {/*

@@ -12,6 +12,7 @@ class User extends Component {
             name: '',
             username: '',
             email: '',
+            profile: '',
             uid: '',
             Posts: '',
             Followers: '',
@@ -29,6 +30,7 @@ class User extends Component {
                 this.setState({ email: user.fields.email.stringValue })
                 this.setState({ uid: user.fields.uid.stringValue })
                 this.setState({ Posts: user.fields.Posts.integerValue })
+                this.setState({ profile: user.fields.Profile_Pic.stringValue })
                 this.setState({ Followers: user.fields.Followers.integerValue })
                 this.setState({ Following: user.fields.Following.integerValue })
                 console.log(this.state.name)
@@ -94,7 +96,7 @@ class User extends Component {
                         </p>
                     </div>
                     <div class="flex justify-center mt-4">
-                        <Gravatar class="shadow sm:w-12 sm:h-12 w-10 h-10 rounded-full" email={this.state.email} alt="Avatar" />
+                        <img class="shadow sm:w-12 sm:h-12 w-10 h-10 rounded-full" src={this.state.profile} alt={`Avatar for ${this.state.username}`} />
                     </div>
                     <div class="mt-6 flex sm:flex-row justify-between text-center">
                         <div>

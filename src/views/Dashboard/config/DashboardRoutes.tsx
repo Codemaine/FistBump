@@ -3,7 +3,7 @@ import { Route, Switch } from "react-router-dom";
 import { Dashboard } from "../components";
 import Post from '../components/PostDetails/Post'
 import Search from '../components/Searchfield'
-import { Settings } from "../components/Settings";
+import Settings from "../components/Settings";
 import User from '../components/User'
 
 export const DashboardRoutes = () => {

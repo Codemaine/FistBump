@@ -3,6 +3,48 @@ body {
   height: 100%;
 }
 
+*,
+*:before,
+*:after {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 2rem 1.5rem;
+  font: 1rem/1.5 "PT Sans", Arial, sans-serif;
+  color: #5a5a5a;
+}
+
+.file {
+position: relative;
+display: inline-block;
+cursor: pointer;
+height: 2.5rem;
+}
+
+#file {
+  box-sizing: border-box;
+font: 1rem/1.5 "Helvetica Neue", Arial, sans-serif;
+min-width: 14rem;
+margin: 0;
+opacity: 0;
+}
+
+.file-custom {
+cursor: pointer;
+position: absolute;
+top: 0;
+right: 0;
+left: 0;
+z-index: 5;
+border-radius: .25rem;
+user-select: none;
+}
+
+
 body {
   display: -ms-flexbox;
   display: flex;

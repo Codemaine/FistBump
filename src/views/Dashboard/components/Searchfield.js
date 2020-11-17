@@ -82,7 +82,7 @@ export default class Search extends Component {
                                 <td class="px-6 py-4 whitespace-no-wrap">
                                   <div class="flex items-center">
                                     <div class="flex-shrink-0 h-10 w-10">
-                                      <Gravatar class="h-10 w-10 rounded-full" email={user.fields.email.stringValue} />
+                                      <img class="h-10 w-10 rounded-full" src={user.fields.Profile_Pic.stringValue} />
                                     </div>
                                     <div class="ml-4">
                                       <Link to={{

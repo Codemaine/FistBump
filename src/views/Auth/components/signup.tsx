@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 import firebase from "../../../firebase";
 import "firebase/auth";
 import "firebase/firestore";
+import 'firebase/storage'
 import './u.css'
 import { AuthContext } from "../../../AuthProvider";
 
@@ -20,8 +21,10 @@ const SignUp = () => {
         username: "",
         email: "",
         password: "",
-        name: ""
-    } as FormItems);
+        first_name: "",
+        last_name: "",
+    });
+    const [image, setImage] = useState();
 
     const history = useHistory();
 
@@ -42,6 +45,14 @@ const SignUp = () => {
 
     }
 
+    const fileupload = (event: any) => {
+        setValues(values => ({
+            ...values,
+            image: event.target.files[0]
+        }))
+        console.log(event.target.files[0])
+    }
+
     const handleSubmit = (event: any) => {
         event?.preventDefault();
         console.log(values, 'values');
@@ -56,22 +67,39 @@ const SignUp = () => {
                     .set({
                         email: values.email,
                         username: values.username,
-                        name: values.name,
+                        name: values.first_name + " " + values.last_name,
                         Posts: 0,
                         Following: 0,
                         Followers: 0,
                         uid: userCredential.user!.uid
                     })
                     .then(() => {
-                        console.log('ok');
-                        history.push("/");
+                        const ref = firebase.storage().ref(`/users/${firebase.auth().currentUser?.uid}`)
+                        ref.put(image).then(function (snapshot) {
+                            console.log('Uploaded a blob or file!');
+
+                            console.log('ok');
+                            history.push("/");
+                        });
+
                     })
                     .catch(error => {
-                        console.error(error.message);
-                        var con = document.getElementById('error');
-                        con!.innerHTML = error.message;
+                        if (error.message === "Firebase Storage: Invalid argument in `put` at index 0: Expected Blob or File.") {
+                            var erro = "You have to choose a profile picture!";
+                            console.error(erro);
+                            var con = document.getElementById('error');
+                            con!.innerHTML = erro;
+                        }
+                        else {
+                            console.error(error.message);
+                            var con = document.getElementById('error');
+                            con!.innerHTML = error.message;
+                        }
                     });
             }).catch(error => {
+                if (error.message === "Firebase Storage: Invalid argument in `put` at index 0: Expected Blob or File.") {
+                    error.message = "You have to choose a profile picture!"
+                }
                 console.error(error)
                 console.error(error.message);
                 var con = document.getElementById('error');
@@ -114,15 +142,29 @@ const SignUp = () => {
                         <form className="mt-8" onSubmit={handleSubmit}>
                             <input type="hidden" name="remember" defaultValue="true" />
                             <div className="rounded-md shadow-sm">
-                                <div>
-                                    <input aria-label="Full Name" value={values.name} name="name" type="name" className="appearance-none  rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5" onChange={handleChange} placeholder="Full Name" />
+                                <div className="grid grid-cols-2 gap-5 pb-5">
+                                    <div>
+                                        <input aria-label="First Name" value={values.first_name} name="first_name" type="name" className="appearance-none  rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5" onChange={handleChange} placeholder="First Name" />
+                                    </div>
+                                    <div>
+                                        <input aria-label="Last Name" value={values.last_name} name="last_name" type="name" className="appearance-none  rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5" onChange={handleChange} placeholder="Last Name" />
+                                    </div>
                                 </div>
-                                <div>
-                                    <input aria-label="Email address" value={values.email} name="email" type="email" className="appearance-none  rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5" onChange={handleChange} placeholder="Email address" />
-                                </div>
-                                <div>
+                                <div className="pb-5">
                                     <input aria-label="Username" value={values.username} name='username' type="username" className="appearance-none  rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5" onChange={handleChange} placeholder="UserName" />
                                 </div>
+                                <div className="pb-5">
+                                    <label className="file appearance-none  rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5" >
+                                        <input type="file" onChange={(event: any) => setImage(event.target.files[0])} id="file" aria-label="File browser example" />
+                                        <span className="file-custom cs_pointer cc_pointer" id="css_cs_pointer">
+                                            Profile Picture
+                                        </span>
+                                    </label>
+                                </div>
+                                <div className="pb-5">
+                                    <input aria-label="Email address" value={values.email} name="email" type="email" className="appearance-none  rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5" onChange={handleChange} placeholder="Email address" />
+                                </div>
+
                                 <div className="-mt-px">
                                     <input aria-label="Password" value={values.password} name="password" type="password" className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5" onChange={handleChange} placeholder="Password" />
                                 </div>

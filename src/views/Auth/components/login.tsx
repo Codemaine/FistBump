@@ -179,6 +179,10 @@ const Login = () => {
 
     return (
         <div style={{ position: 'absolute', top: '50%', right: '50%', transform: 'translate(50%, -50%)' }}>
+            {/*
+  Tailwind UI components require Tailwind CSS v1.8 and the @tailwindcss/ui plugin.
+  Read the documentation to get started: https://tailwindui.com/documentation
+*/}
             <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
                 <div className="max-w-md w-full">
                     <div>
@@ -198,9 +202,9 @@ const Login = () => {
                             </div>
                         </div>
                         <div className="mt-6 flex items-center justify-between">
-                            <div className="text-sm leading-5">
-                                <p className="text-red-600" id="error"></p>
-                                <a onClick={forgot_pass} className="font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition ease-in-out duration-150">
+                            <div className="text-sm leading-5 text-center">
+                                <p className="text-red-600 text-center" id="error"></p>
+                                <a onClick={forgot_pass} className="font-medium text-center text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition ease-in-out duration-150">
                                     Forgot your password?
                 </a>
                             </div>
@@ -215,10 +219,12 @@ const Login = () => {
                 Log in
               </button>
                             <p className="font-xs text-center" style={{ fontSize: '12px', textAlign: 'center', width: '150px' }}>New to FistBump? <a className="text-indigo-600" onClick={handleClick} style={{ cursor: 'pointer' }}>Create an account</a></p>
+                            <p className="invisible">The password is invalid or the user</p>
                         </div>
                     </form>
                 </div>
             </div>
+
         </div>
 
     );

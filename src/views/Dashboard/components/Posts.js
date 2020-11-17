@@ -25,6 +25,7 @@ class SimpleForm extends Component {
       Post_Id: '',
       Creator_Email: '',
       Creator_Username: '',
+      Creator_Pic: '',
       timeM: '',
       uploaded: false,
       drag: false
@@ -150,6 +151,7 @@ class SimpleForm extends Component {
       .then(res => res.json())
       .then(user => {
         this.setState({ Creator_Username: user.fields.username.stringValue })
+        this.setState({ Creator_Pic: user.fields.Profile_Pic.stringValue })
         this.setState({ Creator_Email: firebase.auth().currentUser.email })
       })
     this.state.posts.sort((a, b) => new Date(a) < new Date(b) ? 1 : -1);
@@ -190,6 +192,7 @@ class SimpleForm extends Component {
           Post_Content: this.state.Post_Content,
           Creator_Email: this.state.Creator_Email,
           Creator_Username: this.state.Creator_Username,
+          Creator_Pic: this.state.Creator_Pic,
           timeM: date,
           uid: this.state.Post_Id
         }
@@ -339,7 +342,7 @@ class SimpleForm extends Component {
                             <div className="sm:flex sm:flex-shrink-0 justify-between">
                               <div className="sm:flex sm:info sm:flex-shrink-0">
                                 <div>
-                                  <div className="w-10 h-10 bg-cover bg-center rounded-full mr-3 shadow-inner" style={{ backgroundImage: `url(https://gravatar.com/avatar/${md5(firebase.auth().currentUser?.email)}})` }}>
+                                  <div className="w-10 h-10 bg-cover bg-center rounded-full mr-3 shadow-inner" style={{ backgroundImage: `url(${posts.fields.Creator_Pic.stringValue})` }}>
                                   </div>
                                 </div>
                                 <div>

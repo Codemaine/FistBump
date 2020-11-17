@@ -41,6 +41,16 @@ const Navbar = (props: any) => {
 
                 }
             })
+        firebase.storage().ref(`users/${firebase.auth().currentUser?.uid}`).getDownloadURL().then(function (url) {
+            setUserPic(url)
+            console.log(ProfilePic)
+            var washingtonRef = db.collection("Users").doc(firebase.auth().currentUser?.uid);
+
+
+            washingtonRef.set({
+                Profile_Pic: url
+            }, { merge: true });
+        })
     });
 
     const Edit = (event: any) => {
@@ -95,11 +105,11 @@ const Navbar = (props: any) => {
     const Dropdown2 = () => {
         if (navbar === true) {
             return (<div className=" sm:hidden transform opacity-100 scale-100">
-            <div className="px-2 pt-2 pb-3">
-            <a href="#" className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-white bg-gray-900 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Home</a>
-                <Link to="/settings" className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Settings</Link>
-                <Link to="/search" className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Users</Link>
-          </div>
+                <div className="px-2 pt-2 pb-3">
+                    <a href="#" className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-white bg-gray-900 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Home</a>
+                    <Link to="/settings" className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Settings</Link>
+                    <Link to="/search" className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Users</Link>
+                </div>
             </div>)
         }
         else if (navbar === false) {
@@ -236,8 +246,8 @@ const Navbar = (props: any) => {
                             <div className="hidden sm:block sm:ml-6 mx-auto">
                                 <div className="flex">
                                     <a href="#" className="px-3 py-2 rounded-md text-sm font-medium leading-5 text-white bg-gray-900 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Home</a>
-                                        <Link to="/settings" className="ml-4 px-3 py-2 rounded-md text-sm font-medium leading-5 text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Settings</Link>
-                                        <Link to="/search" className="ml-4 px-3 py-2 rounded-md text-sm font-medium leading-5 text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Users</Link>
+                                    <Link to="/settings" className="ml-4 px-3 py-2 rounded-md text-sm font-medium leading-5 text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Settings</Link>
+                                    <Link to="/search" className="ml-4 px-3 py-2 rounded-md text-sm font-medium leading-5 text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Users</Link>
                                 </div>
                             </div>
                         </div>
@@ -246,7 +256,7 @@ const Navbar = (props: any) => {
                             <div className="ml-3 relative">
                                 <div>
                                     <button className="flex text-sm border-2 border-transparent focus:outline-none transition duration-150 ease-in-out visible" id="user-menu" onClick={() => setOpen(!isOpen)} aria-label="User menu" aria-haspopup="true">
-                                        <img className="h-8 w-8 rounded-full" src={profile_pic} alt="" />
+                                        <img className="h-8 rounded-full" src={ProfilePic} alt="" />
                                     </button>
                                 </div>
                                 {/*
