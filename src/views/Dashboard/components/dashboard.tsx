@@ -5,6 +5,7 @@ import firebase from "../../../firebase";
 import "firebase/firestore";
 import "firebase/messaging";
 import Gravatar from 'react-gravatar'
+
 import './dropdown.css'
 import { AuthContext } from "../../../AuthProvider";
 import SimpleForm from "./Posts";

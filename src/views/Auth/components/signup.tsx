@@ -71,7 +71,8 @@ const SignUp = () => {
                         Posts: 0,
                         Following: 0,
                         Followers: 0,
-                        uid: userCredential.user!.uid
+                        uid: userCredential.user!.uid,
+                        Followers_Array: ['Followers']
                     })
                     .then(() => {
                         const ref = firebase.storage().ref(`/users/${firebase.auth().currentUser?.uid}`)
