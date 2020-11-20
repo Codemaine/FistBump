@@ -123,7 +123,6 @@ class User extends Component {
     }
 
     render() {
-
         return (
             <>
                 <Offline>

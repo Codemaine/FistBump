@@ -50,7 +50,12 @@ const SignUp = () => {
             ...values,
             image: event.target.files[0]
         }))
-        console.log(event.target.files[0])
+        const ref = firebase.storage().ref(`/users/${firebase.auth().currentUser?.uid}`)
+        ref.put(event.target.files[0]).then(function (snapshot) {
+            console.log('Uploaded a blob or file!');
+
+            console.log(event.target.files[0])
+        })
     }
 
     const handleSubmit = (event: any) => {
@@ -75,13 +80,10 @@ const SignUp = () => {
                         Followers_Array: ['Followers']
                     })
                     .then(() => {
-                        const ref = firebase.storage().ref(`/users/${firebase.auth().currentUser?.uid}`)
-                        ref.put(image).then(function (snapshot) {
-                            console.log('Uploaded a blob or file!');
 
-                            console.log('ok');
-                            history.push("/");
-                        });
+                        console.log('ok');
+                        history.push("/");
+
 
                     })
                     .catch(error => {

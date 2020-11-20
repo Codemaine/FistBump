@@ -188,6 +188,7 @@ export default class Settings extends Component {
                                                     <button onClick={this.resetPass} className="py-2 ml-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-red-600 shadow-sm hover:bg-red-500 focus:outline-none focus:shadow-outline-blue active:bg-red-600 transition duration-150 ease-in-out">
                                                         Send Password Reset
                </button>
+
                                                 </div>
                                             </div>
                                         </form>

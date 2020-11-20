@@ -115,6 +115,14 @@ textarea:active {
    margin: 0 auto;
 }
 
+.vertical-align {
+  
+  left: 70vw;
+  /* transform: translateX(31%); */
+  margin-bottom: 1px;
+  
+}
+
 @media (min-width: 640px) { 
   .drop{
     display: block;
