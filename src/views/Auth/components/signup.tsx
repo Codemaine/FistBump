@@ -59,7 +59,6 @@ const SignUp = () => {
 
     const handleSubmit = (event: any) => {
         event?.preventDefault();
-        console.log(values, 'values');
         const db = firebase.firestore();
         db.collection('Users').where('username', '==', values.username)
             .get()
