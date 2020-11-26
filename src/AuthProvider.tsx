@@ -18,8 +18,8 @@ export const AuthProvider = ({ children }: any) => {
         firebase.auth().onAuthStateChanged((user: any) => {
             setUser(user);
             setLoadingAuthState(false);
-            console.log(user, 'ap user');
-            console.log(user !== null, 'ap authenticated');
+            // console.log(user, 'ap user');
+            // console.log(user !== null, 'ap authenticated');
         });
     }, []);
 

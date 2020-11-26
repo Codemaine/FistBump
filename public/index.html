@@ -10,11 +10,12 @@
   <meta name="theme-color" content="#000000" />
   <meta name="description" content="Web site created using create-react-app" />
   <script src="https://use.fontawesome.com/d96a860493.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap"
-    rel="stylesheet">
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <link href="https://fonts.googleapis.com/css?family=" rel="stylesheet">
   <link rel="apple-touch-icon" href="https://www.flaticon.com/premium-icon/icons/svg/2201/2201734.svg" />
+  <!-- <script>
+    window.__REACT_DEVTOOLS_GLOBAL_HOOK__.inject = function () {}
+    </script> -->
   <!--
       manifest.json provides metadata used when your web app is installed on a
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
@@ -32,10 +33,6 @@
   <title>FistBump</title>
 </head>
 <style>
-  * {
-    font-family: 'Quicksand';
-  }
-
   #root {
     margin: 0;
     padding: 0;
@@ -44,13 +41,13 @@
   body {
     background-color: #fff !important;
     margin: 0;
-    padding: 0;
+    padding: 0 !important;
   }
 </style>
 
 <body>
   <noscript>You need to enable JavaScript to run this app.</noscript>
-  <div id="root" style='height: 100vh; width: 100vw;'></div>
+  <div id="root" class="font-sans" style='height: 100vh; width: 100vw;'></div>
   <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.

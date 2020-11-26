@@ -4,6 +4,7 @@ import "firebase/firestore"
 import Navbar from './settingsnav';
 import Swal from 'sweetalert2/dist/sweetalert2.js'
 import './setting.css';
+import { useHistory } from 'react-router-dom';
 
 export default class Settings extends Component {
     constructor(props) {
@@ -23,6 +24,7 @@ export default class Settings extends Component {
         this.settings = this.settings.bind(this);
         this.resetPass = this.resetPass.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.deleteAccount = this.deleteAccount.bind(this);
         this.photo = this.photo.bind(this)
     }
     componentDidMount() {
@@ -103,6 +105,41 @@ export default class Settings extends Component {
     }
 
 
+    deleteAccount(e) {
+        e.preventDefault()
+        Swal.fire({
+            icon: 'error',
+            title: 'Delete Account',
+            cancelButtonText:
+                '<i class="fa fa-thumbs-down"></i>',
+            text: 'Are you sure? You will lose all your followers, Posts and Private Information',
+        }).then((result) => {
+            var user = firebase.auth().currentUser;
+
+            user.delete().then(function () {
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                })
+
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Account Succesfuly Deleted'
+                })
+                var history = useHistory();
+                history.push('/login')
+            }).catch(function (error) {
+                console.error(error)
+            })
+        })
+    }
 
     settings(e) {
         e.preventDefault();
@@ -167,7 +204,7 @@ export default class Settings extends Component {
                                                                 Photo
               </label>
                                                             <div class="mt-2 flex items-center">
-                                                                <img src={this.state.photo} class="inline-block h-12 rounded-full overflow-hidden bg-gray-100" />
+                                                                <img src={this.state.photo} alt="profile" class="inline-block h-12 rounded-full overflow-hidden bg-gray-100" />
                                                                 <div className="upload-btn-wrapper">
                                                                     <input type="file" onChange={this.photo} />
                                                                     <span class="btn ml-5 rounded-md shadow-sm">
@@ -185,8 +222,11 @@ export default class Settings extends Component {
                                                     <button onClick={this.settings} className="py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 shadow-sm hover:bg-indigo-500 focus:outline-none focus:shadow-outline-blue active:bg-indigo-600 transition duration-150 ease-in-out">
                                                         Save
                   </button>
-                                                    <button onClick={this.resetPass} className="py-2 ml-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-red-600 shadow-sm hover:bg-red-500 focus:outline-none focus:shadow-outline-blue active:bg-red-600 transition duration-150 ease-in-out">
+                                                    <button onClick={this.resetPass} className="py-2 ml-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-blue-600 shadow-sm hover:bg-blue-500 focus:outline-none focus:shadow-outline-blue active:bg-red-600 transition duration-150 ease-in-out">
                                                         Send Password Reset
+               </button>
+                                                    <button onClick={this.deleteAccount} className="py-2 ml-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-red-600 shadow-sm hover:bg-red-500 focus:outline-none focus:shadow-outline-blue active:bg-red-600 transition duration-150 ease-in-out">
+                                                        Delete Account
                </button>
 
                                                 </div>

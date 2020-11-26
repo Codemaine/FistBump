@@ -10,16 +10,18 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "@types/cacheable-request": "^6.0.1",
     "@types/jest": "^24.9.1",
     "@types/jquery": "^3.5.4",
-    "@types/node": "^12.19.4",
     "@types/react": "^16.9.50",
     "@types/react-dom": "^16.9.8",
     "@types/react-gravatar": "^2.6.8",
     "@types/react-router-dom": "^5.1.3",
     "axios": "^0.21.0",
+    "cacheable-request": "^7.0.1",
     "chokidar": "^3.4.3",
     "crypto-js": "^4.0.0",
+    "emailjs-com": "^2.6.4",
     "firebase": "^7.9.1",
     "gravatar-react": "^1.1.0",
     "imgbb-uploader": "^1.1.0",
@@ -49,6 +51,7 @@
     "react-time-ago": "^6.2.0",
     "react-timeago": "^5.2.0",
     "react-typetool": "^2.0.3",
+    "reverse-md5": "^0.0.4",
     "sweetalert2": "^10.8.1",
     "tailwindcss": "^1.9.6",
     "timeago-react": "^3.0.1",
@@ -75,5 +78,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/node": "^12.19.4"
   }
 }

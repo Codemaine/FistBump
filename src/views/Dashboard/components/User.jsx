@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
-import { useParams } from 'react-router-dom'
-import Swal from 'sweetalert2/dist/sweetalert2'
-import Gravatar from 'react-gravatar'
+import { useHistory } from 'react-router-dom'
 import firebase from '../../../firebase'
 import { Offline, Online } from 'react-detect-offline';
 import './user.css'
@@ -42,23 +40,33 @@ class User extends Component {
                 this.setState({ Following: user.fields.Following.integerValue })
                 this.setState({ Followers_Array: user.fields.Followers_Array.arrayValue.values })
                 console.log(this.state.Followers_Array)
+                if (this.state.username === '') {
+                    var history = useHistory();
+                    history.push('/404')
+                }
                 this.state.Followers_Array.filter(user => {
                     return user.stringValue.indexOf(firebase.auth().currentUser.uid) <= 0
 
                 })
+                    // eslint-disable-next-line
                     .map((user) => {
                         console.log(user)
+                        // eslint-disable-next-line
                         if (user.stringValue === firebase.auth().currentUser.uid) {
                             console.log(user)
                             this.setState({ User_Followed: true })
                             this.setState({ User_NotFollowed: false })
                         }
+                        // eslint-disable-next-line
                         if (user.stringValue != firebase.auth().currentUser.uid) {
                             console.log(user)
                             this.setState({ User_Followed: false })
                             this.setState({ User_NotFollowed: true })
                         }
                     })
+            })
+            .catch((err) => {
+                console.error(err)
             })
         const db = firebase.firestore();
         db.collection('Users').where("Followers_Array", "array-contains", { id: firebase.auth().currentUser.uid }).get().then(function (querySnapshot) {
@@ -73,7 +81,11 @@ class User extends Component {
     }
     componentDidUpdate() {
         document.title = `${this.state.username} | FistBump`
+        if (this.state.offline === true) {
+            document.title = `FistBump`
+        }
     }
+
     following(e) {
         console.log('yes')
         const db = firebase.firestore();
@@ -122,6 +134,7 @@ class User extends Component {
             });
     }
 
+
     render() {
         return (
             <>
@@ -133,50 +146,50 @@ class User extends Component {
                 < div className="center" >
                     <div class="bg-white shadow p-4 rounded lg:w-64">
 
-                        {/* <div className="flex justify-center mt-4">
+                        <Offline> <div className="flex justify-center mt-4">
                             <h1>You're offline! Connect to the internet to view info.</h1>
-                        </div> */}
-                        <div class="text-center mt-4">
-                            <p class="text-gray-600 font-bold">{this.state.name}
-                            </p>
-                            <p class="text-sm font-hairline text-gray-600 mt-1">{this.state.username}
-                            </p>
-                        </div>
-                        <div class="flex justify-center mt-4">
-                            <img class="shadow sm:w-12 sm:h-12 w-10 h-10 rounded-full" src={this.state.profile} alt={`Avatar for ${this.state.username}`} />
-                        </div>
-                        <div class="mt-6 flex sm:flex-row justify-between text-center">
-                            <div>
-                                <p class="text-gray-700 font-bold">{this.state.Posts}
+                        </div> </Offline>
+                        <Online>
+                            <div class="text-center mt-4">
+                                <p class="text-gray-600 font-bold">{this.state.name}
                                 </p>
-                                <p class="text-xs mt-2 text-gray-600 font-hairline">Posts{'\u00A0'}{'\u00A0'}
+                                <p class="text-sm font-hairline text-gray-600 mt-1">{this.state.username}
                                 </p>
                             </div>
-                            <div>
-                                <p class="text-gray-700 font-bold">{this.state.Followers}
-                                </p>
-                                <p class="text-xs mt-2 text-gray-600 font-hairline">Followers{'\u00A0'}{'\u00A0'}
-                                </p>
+                            <div class="flex justify-center mt-4">
+                                <img class="shadow sm:w-12 sm:h-12 w-10 h-10 rounded-full" src={this.state.profile} alt={`Avatar for ${this.state.username}`} />
                             </div>
-                            <div>
-                                <p class="text-gray-700 font-bold">{this.state.Following}
-                                </p>
-                                <p class="text-xs mt-2 text-gray-700 font-hairline">Following{'\u00A0'}{'\u00A0'}
-                                </p>
+                            <div class="mt-6 flex sm:flex-row justify-between text-center">
+                                <div>
+                                    <p class="text-gray-700 font-bold">{this.state.Posts}
+                                    </p>
+                                    <p class="text-xs mt-2 text-gray-600 font-hairline">Posts{'\u00A0'}{'\u00A0'}
+                                    </p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-700 font-bold">{this.state.Followers}
+                                    </p>
+                                    <p class="text-xs mt-2 text-gray-600 font-hairline">Followers{'\u00A0'}{'\u00A0'}
+                                    </p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-700 font-bold">{this.state.Following}
+                                    </p>
+                                    <p class="text-xs mt-2 text-gray-700 font-hairline">Following{'\u00A0'}{'\u00A0'}
+                                    </p>
+                                </div>
                             </div>
-                        </div>
-                        <div class="mt-6">
-                            {this.state.User_NotFollowed &&
-                                <button onClick={this.following} class="rounded w-full items-center shadow bg-blue-500 px-4 py-2 text-white hover:bg-blue-400">
-                                    Follow
+                            <div class="mt-6">
+                                {this.state.User_NotFollowed &&
+                                    <button onClick={this.following} class="rounded w-full items-center shadow bg-blue-500 px-4 py-2 text-white hover:bg-blue-400">
+                                        Follow
     </button>}
-                            {this.state.User_Followed &&
-                                <button onClick={this.unfollowing} style={{ display: `${this.state.User_Followed}` }} class="rounded w-full items-center focus:border-none shadow bg-grey-500 px-4 py-2 text-black hover:bg-grey-400">
-                                    Followed
+                                {this.state.User_Followed &&
+                                    <button onClick={this.unfollowing} style={{ display: `${this.state.User_Followed}` }} class="rounded w-full items-center focus:border-none shadow bg-grey-500 px-4 py-2 text-black hover:bg-grey-400">
+                                        Followed
     </button>}
-                        </div>
-
-
+                            </div>
+                        </Online>
                     </div>
                 </div >
             </>

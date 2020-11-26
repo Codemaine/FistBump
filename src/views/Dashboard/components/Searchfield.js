@@ -1,11 +1,8 @@
 import React, { Component } from 'react'
-import ReactSearchBox from 'react-search-box'
 import './Search.css'
-import firebase from '../../../firebase'
 import 'axios'
 import 'firebase/firestore'
 import Navbar from './searchnav.tsx'
-import Gravatar from 'react-gravatar'
 import { Link } from 'react-router-dom'
 
 export default class Search extends Component {
@@ -37,7 +34,6 @@ export default class Search extends Component {
   }
 
   render() {
-    const { users } = this.state
     return (
       <div>
         <Navbar />
@@ -82,7 +78,7 @@ export default class Search extends Component {
                                 <td class="px-6 py-4 whitespace-no-wrap">
                                   <div class="flex items-center">
                                     <div class="flex-shrink-0 h-10 w-10">
-                                      <img class="h-10 w-10 rounded-full" src={user.fields.Profile_Pic.stringValue} />
+                                      <img class="h-10 w-10 rounded-full" src={user.fields.Profile_Pic.stringValue} alt="Profile" />
                                     </div>
                                     <div class="ml-4">
                                       <Link to={{

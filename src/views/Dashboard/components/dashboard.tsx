@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import firebase from "../../../firebase";
 import "firebase/firestore";
 import "firebase/messaging";
-import Gravatar from 'react-gravatar'
+
 
 import './dropdown.css'
 import { AuthContext } from "../../../AuthProvider";
@@ -20,7 +20,7 @@ function Offline() {
   } else {
     return <div className="bg-warning d-flex justify-content-center offline" style={{ padding: '10px', display: 'none' }}>You are offline. Connect to the internet to view the latests posts</div>
   }
-
+  // eslint-disable-next-line
   return (
     <div></div>
   )
@@ -29,11 +29,13 @@ function Offline() {
 const Dashboard = () => {
   const [userName, setUsername] = useState();
   const [Name, setUserName] = useState();
+  // eslint-disable-next-line
   const [ProfilePic, setUserPic] = useState();
   const [Email, setUserEmail] = useState();
   const { loadingAuthState } = useContext(AuthContext);
   const history = useHistory();
 
+  // eslint-disable-next-line
   const handleClick = (event: any) => {
     event.preventDefault();
 

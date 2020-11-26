@@ -2,35 +2,37 @@ import React, { useState, useEffect } from 'react'
 import firebase from '../../../firebase'
 import 'firebase/auth'
 import 'firebase/firestore'
-import { useHistory, Link, NavLink } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import Swal from 'sweetalert2/dist/sweetalert2.js'
-import { Modal, Button, Toast } from 'react-bootstrap';
-import Search from './Searchfield';
-import Gravatar from 'react-gravatar'
+import { Offline } from 'react-detect-offline';
 
 
 
-const Navbar = (props: any) => {
+const Navbar = (props) => {
     const [userName, setUsername] = useState();
     const [Name, setUserName] = useState();
     const [ProfilePic, setUserPic] = useState();
+    // eslint-disable-next-line
     const [Email, setUserEmail] = useState();
     const [NewUser, setNewUsername] = useState(userName);
     const [NewName, setNewName] = useState(Name);
     const [NewPass, setNewPass] = useState();
+    // eslint-disable-next-line
     const [show, setShow] = useState(false);
     const [isOpen, setOpen] = useState(false);
     const [navbar, setNavbar] = useState(false);
     const history = useHistory();
 
+    // eslint-disable-next-line
     const handleClose = () => setShow(false);
+    // eslint-disable-next-line
     const handleShow = () => setShow(true);
 
     useEffect(() => {
         const db = firebase.firestore();
         db
             .collection("Users")
-            .doc(firebase.auth().currentUser!.uid)
+            .doc(firebase.auth().currentUser.uid)
             .get()
             .then(res => {
                 const user = res.data();
@@ -38,37 +40,30 @@ const Navbar = (props: any) => {
                     setUsername(user['username'])
                     setUserName(user['name'])
                     setUserEmail(user['email'])
-
+                    setUserPic(user['Profile_Pic'])
                 }
             })
-        firebase.storage().ref(`users/${firebase.auth().currentUser?.uid}`).getDownloadURL().then(function (url) {
-            setUserPic(url)
-            console.log(ProfilePic)
-            var washingtonRef = db.collection("Users").doc(firebase.auth().currentUser?.uid);
 
-
-            washingtonRef.set({
-                Profile_Pic: url
-            }, { merge: true });
-        })
     });
 
-    const Edit = (event: any) => {
+    // eslint-disable-next-line
+    const Edit = (event) => {
         const db = firebase.firestore();
         const cityRef = db.collection('Users').doc(firebase.auth().currentUser?.uid);
 
         // Set the 'capital' field of the city
+        // eslint-disable-next-line
         const res = cityRef.update({
             name: NewName,
             username: NewUser
         })
             .then(function () {
                 const user = firebase.auth().currentUser;
-                user!.updateProfile({
+                user.updateProfile({
                     displayName: NewName,
                 })
                     .then(function () {
-                        user!.updatePassword(NewPass!).then(function () {
+                        user.updatePassword(NewPass).then(function () {
                             // Update successful.
                             setShow(false)
                             console.log('Success')
@@ -106,7 +101,7 @@ const Navbar = (props: any) => {
         if (navbar === true) {
             return (<div className=" sm:hidden transform opacity-100 scale-100">
                 <div className="px-2 pt-2 pb-3">
-                    <a href="#" className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-white bg-gray-900 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Home</a>
+                    <a href="/" className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-white bg-gray-900 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Home</a>
                     <Link to="/settings" className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Settings</Link>
                     <Link to="/search" className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Users</Link>
                 </div>
@@ -117,7 +112,7 @@ const Navbar = (props: any) => {
                 <div className="hidden sm:hidden transform opacity-100 scale-100">
                     <div className="px-2 pt-2 pb-3">
                         <Link to="/" className="block px-3 py-2 rounded-md text-base font-medium text-white bg-gray-900 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Home</Link>
-                        <a href="#" className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Users</a>
+                        <a href="/" className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Users</a>
                     </div>
                 </div>
             )
@@ -149,9 +144,9 @@ const Navbar = (props: any) => {
             return (
                 <div className="origin-top-right transform opacity-100 scale-100 absolute right-0 mt-2 w-48 rounded-md shadow-lg">
                     <div className="py-1 rounded-md bg-white shadow-xs" role="menu" aria-orientation="vertical" aria-labelledby="user-menu">
-                        <a href="#" className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out" onClick={() => window.open(`user/${firebase.auth().currentUser?.uid}`, '_self')} role="menuitem">Your Profile</a>
+                        <a href="/" className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out" onClick={() => window.open(`user/${firebase.auth().currentUser?.uid}`, '_self')} role="menuitem">Your Profile</a>
                         <Link to="/settings" className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out" role="menuitem">Settings</Link>
-                        <a href="#" className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out" role="menuitem" onClick={handleClick}>Sign out</a>
+                        <a href="/" className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out" role="menuitem" onClick={handleClick}>Sign out</a>
                     </div>
                 </div>
             )
@@ -160,9 +155,9 @@ const Navbar = (props: any) => {
             return (
                 <div className="origin-top-right transform opacity-100 scale-100 absolute right-0 mt-2 w-48 invisible rounded-md shadow-lg">
                     <div className="py-1 rounded-md bg-white shadow-xs" role="menu" aria-orientation="vertical" aria-labelledby="user-menu">
-                        <a href="#" className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out" role="menuitem">Your Profile</a>
-                        <a href="#" className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out" role="menuitem">Settings</a>
-                        <a href="#" className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out" role="menuitem" onClick={handleClick}>Sign out</a>
+                        <a href="/" className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out" role="menuitem">Your Profile</a>
+                        <a href="/" className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out" role="menuitem">Settings</a>
+                        <a href="/" className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out" role="menuitem" onClick={handleClick}>Sign out</a>
                     </div>
                 </div>
             )
@@ -172,19 +167,22 @@ const Navbar = (props: any) => {
         )
     }
 
-    const handleNameChange = (e: any) => {
+    // eslint-disable-next-line
+    const handleNameChange = (e) => {
         setNewName(e.target.value)
     }
 
-    const handleUserChange = (e: any) => {
+    // eslint-disable-next-line
+    const handleUserChange = (e) => {
         setNewUsername(e.target.value)
     }
 
-    const handlePassChange = (e: any) => {
+    // eslint-disable-next-line
+    const handlePassChange = (e) => {
         setNewPass(e.target.value)
     }
 
-    const handleClick = (event: any) => {
+    const handleClick = (event) => {
         event.preventDefault();
 
         firebase
@@ -214,11 +212,15 @@ const Navbar = (props: any) => {
 
     var email = firebase.auth().currentUser?.email;
     var md5 = require('md5');
+    // eslint-disable-next-line
     var profile_pic = 'https://gravatar.com/avatar/' + md5(email);
 
 
     return (
-        <div className="container-fullwidth">
+        <div className="m-0">
+            <Offline>
+                <div className="alert alert-warning">You're offline! Connect to the internet to view the latest posts.</div>
+            </Offline>
             {/*
   Tailwind UI components require Tailwind CSS v1.8 and the @tailwindcss/ui plugin.
   Read the documentation to get started: https://tailwindui.com/documentation
@@ -245,7 +247,7 @@ const Navbar = (props: any) => {
                             </div>
                             <div className="hidden sm:block sm:ml-6 mx-auto">
                                 <div className="flex">
-                                    <a href="#" className="px-3 py-2 rounded-md text-sm font-medium leading-5 text-white bg-gray-900 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Home</a>
+                                    <a href="/" className="px-3 py-2 rounded-md text-sm font-medium leading-5 text-white bg-gray-900 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Home</a>
                                     <Link to="/settings" className="ml-4 px-3 py-2 rounded-md text-sm font-medium leading-5 text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Settings</Link>
                                     <Link to="/search" className="ml-4 px-3 py-2 rounded-md text-sm font-medium leading-5 text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Users</Link>
                                 </div>

@@ -1,9 +1,8 @@
 import React, { useState, useContext } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import firebase from "../../../firebase";
 import "firebase/auth";
 import "firebase/firestore";
-import 'firebase/storage'
 import './u.css'
 import { AuthContext } from "../../../AuthProvider";
 
@@ -24,14 +23,18 @@ const SignUp = () => {
         first_name: "",
         last_name: "",
     });
+    // eslint-disable-next-line
     const [image, setImage] = useState();
+    const [data, setData] = useState(false);
 
     const history = useHistory();
 
+    // eslint-disable-next-line
     const Logout = () => {
         history.push("/login")
     }
 
+    // eslint-disable-next-line
     const forgot_pass = () => {
         history.push('/forgot-password')
     }
@@ -45,71 +48,76 @@ const SignUp = () => {
 
     }
 
-    const fileupload = (event: any) => {
-        setValues(values => ({
-            ...values,
-            image: event.target.files[0]
-        }))
-        const ref = firebase.storage().ref(`/users/${firebase.auth().currentUser?.uid}`)
-        ref.put(event.target.files[0]).then(function (snapshot) {
-            console.log('Uploaded a blob or file!');
-
-            console.log(event.target.files[0])
-        })
-    }
+    // const fileupload = (event: any) => {
+    //     console.log(event.target.files[0])
+    //     const ref = firebase.storage().ref(`/users/${firebase.auth().currentUser?.uid}`)
+    //     ref.put(event.target.files[0]).then(function (snapshot) {
+    //         console.log('Uploaded a blob or file!');
+    //     })
+    // }
 
     const handleSubmit = (event: any) => {
         event?.preventDefault();
         console.log(values, 'values');
-        firebase
-            .auth()
-            .createUserWithEmailAndPassword(values.email, values.password)
-            .then((userCredential: firebase.auth.UserCredential) => {
-                authContext.setUser(userCredential);
-                const db = firebase.firestore();
-                db.collection("Users")
-                    .doc(userCredential.user!.uid)
-                    .set({
-                        email: values.email,
-                        username: values.username,
-                        name: values.first_name + " " + values.last_name,
-                        Posts: 0,
-                        Following: 0,
-                        Followers: 0,
-                        uid: userCredential.user!.uid,
-                        Followers_Array: ['Followers']
-                    })
-                    .then(() => {
+        const db = firebase.firestore();
+        db.collection('Users').where('username', '==', values.username)
+            .get()
+            .then(function (querySnapshot) {
+                querySnapshot.forEach(function (doc) {
+                    setData(!!doc.data())
+                    if (!!doc.data()) {
+                        var con = document.getElementById('error');
+                        con!.innerHTML = `The username ${values.username} is taken.`;
+                    }
+                    else {
+                        firebase
+                            .auth()
+                            .createUserWithEmailAndPassword(values.email, values.password)
+                            .then((userCredential: firebase.auth.UserCredential) => {
+                                authContext.setUser(userCredential);
+                                const db = firebase.firestore();
+                                db.collection("Users")
+                                    .doc(userCredential.user!.uid)
+                                    .set({
+                                        email: values.email,
+                                        username: values.username,
+                                        name: values.first_name + " " + values.last_name,
+                                        Posts: 0,
+                                        Following: 0,
+                                        Followers: 0,
+                                        Profile_Pic: 'https://i.ibb.co/8ggnVz0/avatarinsideacircle-122011.png',
+                                        uid: userCredential.user!.uid,
+                                        Followers_Array: ['Followers']
+                                    })
+                                    .then(() => {
 
-                        console.log('ok');
-                        history.push("/");
 
 
-                    })
-                    .catch(error => {
-                        if (error.message === "Firebase Storage: Invalid argument in `put` at index 0: Expected Blob or File.") {
-                            var erro = "You have to choose a profile picture!";
-                            console.error(erro);
-                            var con = document.getElementById('error');
-                            con!.innerHTML = erro;
-                        }
-                        else {
-                            console.error(error.message);
-                            var con = document.getElementById('error');
-                            con!.innerHTML = error.message;
-                        }
-                    });
-            }).catch(error => {
-                if (error.message === "Firebase Storage: Invalid argument in `put` at index 0: Expected Blob or File.") {
-                    error.message = "You have to choose a profile picture!"
-                }
-                console.error(error)
-                console.error(error.message);
-                var con = document.getElementById('error');
-                con!.innerHTML = error.message;
+
+                                        history.push("/");
+
+
+                                    })
+                                    .catch(error => {
+                                        var erro = error.message;
+                                        console.error(erro);
+                                        var con = document.getElementById('error');
+                                        con!.innerHTML = erro;
+                                    });
+                            }).catch(error => {
+
+                                console.error(error)
+                                console.error(error.message);
+                                var con = document.getElementById('error');
+                                con!.innerHTML = error.message;
+                            })
+                    }
+                });
             })
 
     }
+
+
 
     if (loadingAuthState) {
 
@@ -129,67 +137,50 @@ const SignUp = () => {
 
     return (
         <div style={{ textAlign: 'center' }}>
-            <div style={{ position: 'absolute', top: '50%', right: '50%', transform: 'translate(50%, -50%)' }}>
-                {/*
-  Tailwind UI components require Tailwind CSS v1.8 and the @tailwindcss/ui plugin.
-  Read the documentation to get started: https://tailwindui.com/documentation
-*/}
-                <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-                    <div className="max-w-md w-full">
-                        <div>
-                            <img className="mx-auto h-12 w-auto" src="https://i.ibb.co/8Nyq7r8/n8pk9u-X-removebg-preview.png" alt="logo" />
-                            <h2 className="mt-6 text-center text-3xl leading-9 font-extrabold text-gray-900">
-                                Sign Up
-            </h2>
-                        </div>
-                        <form className="mt-8" onSubmit={handleSubmit}>
-                            <input type="hidden" name="remember" defaultValue="true" />
-                            <div className="rounded-md shadow-sm">
-                                <div className="grid grid-cols-2 gap-5 pb-5">
-                                    <div>
-                                        <input aria-label="First Name" value={values.first_name} name="first_name" type="name" className="appearance-none  rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5" onChange={handleChange} placeholder="First Name" />
-                                    </div>
-                                    <div>
-                                        <input aria-label="Last Name" value={values.last_name} name="last_name" type="name" className="appearance-none  rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5" onChange={handleChange} placeholder="Last Name" />
-                                    </div>
-                                </div>
-                                <div className="pb-5">
-                                    <input aria-label="Username" value={values.username} name='username' type="username" className="appearance-none  rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5" onChange={handleChange} placeholder="UserName" />
-                                </div>
-                                <div className="pb-5">
-                                    <label className="file appearance-none  rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5" >
-                                        <input type="file" onChange={(event: any) => setImage(event.target.files[0])} id="file" aria-label="File browser example" />
-                                        <span className="file-custom cs_pointer cc_pointer" id="css_cs_pointer">
-                                            Profile Picture
-                                        </span>
-                                    </label>
-                                </div>
-                                <div className="pb-5">
-                                    <input aria-label="Email address" value={values.email} name="email" type="email" className="appearance-none  rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5" onChange={handleChange} placeholder="Email address" />
-                                </div>
-
-                                <div className="-mt-px">
-                                    <input aria-label="Password" value={values.password} name="password" type="password" className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5" onChange={handleChange} placeholder="Password" />
-                                </div>
-                            </div>
-                            <div className="mt-6 flex items-center justify-between">
-                                <div className="text-sm leading-5">
-                                    <p className="text-red-600" id="error"></p>
-                                </div>
-                            </div>
-                            <div className="mt-6">
-                                <button type="submit" className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out">
-                                    <span className="absolute left-0 inset-y-0 flex items-center pl-3">
-                                        <svg className="h-5 w-5 text-indigo-500 group-hover:text-indigo-400 transition ease-in-out duration-150" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
-                                        </svg>
-                                    </span>
-                Sign up
-              </button>
-                                <p className="font-xs text-center" style={{ fontSize: '12px', textAlign: 'center', width: '150px' }}>Already have an account? <a className="text-indigo-600" onClick={Logout} style={{ cursor: 'pointer' }}>LogIn</a></p>
-                            </div>
-                        </form>
+            <div className="w-full flex flex-wrap">
+                {/* Register Section */}
+                <div className="w-full md:w-1/2 flex flex-col">
+                    <div className="flex justify-center md:justify-start pt-12 md:pl-12 md:-mb-12">
+                        <img src="https://i.ibb.co/tX3qChr/n8pk9u-X-removebg-preview-1.png" alt="" />
                     </div>
+                    <div className="flex flex-col justify-center md:justify-start my-auto pt-8 md:pt-0 px-8 md:px-24 lg:px-32">
+                        <p className="text-center text-3xl">SignUp.</p>
+                        <form className="flex flex-col pt-3 md:pt-8" onSubmit={handleSubmit}>
+                            <div className="grid lg:grid-cols-2 align-middle">
+                                <div className="flex flex-col w-full pt-4 pr-5">
+                                    <label htmlFor="name" className="text-lg">First Name</label>
+                                    <input type="text" id="name" name="first_name" value={values.first_name} onChange={handleChange} placeholder="John" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline" />
+                                </div>
+                                <div className="flex flex-col w-full pt-4">
+                                    <label htmlFor="name" className="text-lg">Last Name</label>
+                                    <input type="text" id="name" name="last_name" value={values.last_name} onChange={handleChange} placeholder="Smith" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline" />
+                                </div>
+                            </div>
+                            <div className="flex flex-col pt-4">
+                                <label htmlFor="username" className="text-lg">Username</label>
+                                <input type="username" id="username" value={values.username} onChange={handleChange} name="username" placeholder="john@123" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline" />
+                            </div>
+                            <div className="flex flex-col pt-4">
+                                <label htmlFor="password" className="text-lg">Email</label>
+                                <input type="email" id="email" name="email" value={values.email} onChange={handleChange} placeholder="your@email.com" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline" />
+                            </div>
+                            <div className="flex flex-col pt-4">
+                                <label htmlFor="password" className="text-lg">Password</label>
+                                <input type="password" id="password" value={values.password} onChange={handleChange} name="password" placeholder="Password" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline" />
+                            </div>
+                            <div className="flex flex-col pt-4">
+                                <p className="text-red-500" id="error"></p>
+                            </div>
+                            <input type="submit" value="Register" className="bg-black text-white font-bold text-lg hover:bg-gray-700 p-2 mt-8" />
+                        </form>
+                        <div className="text-center pt-12 pb-12">
+                            <p>Already have an account? <Link to="/login" className="underline font-semibold">Log in here</Link></p>
+                        </div>
+                    </div>
+                </div>
+                {/* Image Section */}
+                <div className="w-1/2 shadow-2xl">
+                    <img className="object-cover w-full h-full hidden md:block p-0" src={require('./assets/cover.jpeg')} alt="" />
                 </div>
             </div>
 

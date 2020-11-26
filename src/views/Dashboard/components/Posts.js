@@ -1,18 +1,10 @@
-import React, { Component, useState } from "react";
+import React, { Component } from "react";
 import firebase from "../../../firebase";
 import "firebase/firestore";
 import 'firebase/storage'
-import { useHistory } from "react-router-dom";
 import Swal from 'sweetalert2'
-import Gravatar from 'react-gravatar'
 import './Posts.css'
-import TimeAgo from 'react-timeago';
-import PostsList from './Postlists'
-import { post } from "jquery";
-import md5 from 'md5'
-import addNotification from 'react-push-notification';
-import imgbbUploader from 'imgbb-uploader'
-import Dropdown from "./dropdown";
+import Post from "./Post";
 
 
 class SimpleForm extends Component {
@@ -97,6 +89,11 @@ class SimpleForm extends Component {
       this.setState({ drag: true })
     }
   }
+  like = (e, id) => {
+    e.preventDefault();
+
+  }
+
   handleDragOut = (e) => {
     e.preventDefault()
     e.stopPropagation()
@@ -119,6 +116,7 @@ class SimpleForm extends Component {
       }
       else {
         this.setState({ uploaded: true })
+        // eslint-disable-next-line
         const file = e.dataTransfer.files
         firebase.storage().ref('posts/' + this.state.Post_Id).put(e.dataTransfer.files[0]).then(function () {
           console.log('succesfully uploaded')
@@ -169,11 +167,20 @@ class SimpleForm extends Component {
   handleImage = (posts) => {
     firebase.storage().ref('posts/' + posts.fields.Post_Id.stringValue).getDownloadURL().then(imgUrl => {
       return (
-        <img className="w-full" src={imgUrl} />
+        <img className="w-full" src={imgUrl} alt={`${posts.fields.Post_Id.stringValue}`} />
       )
     })
   }
 
+  like = (id) => {
+    var db = firebase.firestore();
+    db.collection('Posts').doc(id)
+      .collection('Likes').set({
+        uid: firebase.auth().currentUser.uid
+      }).then(function () {
+        console.log(`Liked Post with id: ${id}`)
+      })
+  }
 
   onSubmitForm = (e) => {
     e.preventDefault();
@@ -187,6 +194,7 @@ class SimpleForm extends Component {
       }
       else {
         const db = firebase.firestore();
+        // eslint-disable-next-line
         const uid = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
         const date = new Date().toString();
         const NewPost = {
@@ -199,8 +207,10 @@ class SimpleForm extends Component {
           uid: this.state.Post_Id,
           Likes: 0,
           Comments: 0,
+          // eslint-disable-next-line
           Likes_Array: ["Likes"]
         }
+        // eslint-disable-next-line
         var id = Math.random().toString(36).substr(2, 9);
         db.collection("Posts").doc(this.state.Post_Id).set(NewPost)
           .then(function (docRef) {
@@ -249,8 +259,6 @@ class SimpleForm extends Component {
   }
 
   render() {
-    const { items } = this.state;
-
     return (
       <div>
         <div>
@@ -266,10 +274,12 @@ class SimpleForm extends Component {
                         <div className="col-span-10">
                           <label for="company_website" className="block text-sm font-medium leading-5 text-gray-700">
                             Post Title
-                </label>
+    {/* // eslint-disable-next-line */}
+                          </label>
                           <div className="mt-1 flex w-100 rounded-md shadow-sm">
-
-                            <input id="company_website" name="Post_Title" id="Post_Title" value={this.state.Posts_name} onChange={this.onInputchange} className="form-input  focus:outline-none focus:shadow-outline mt-1 block w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5" placeholder="How to cook..." />
+                            {/*  // eslint-disable-next-line */}
+                            <input name="Post_Title" id="Post_Title" value={this.state.Posts_name} onChange={this.onInputchange} className="form-input  focus:outline-none focus:shadow-outline mt-1 block w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5" placeholder="How to cook..." />
+                            {/*  // eslint-disable-next-line */}
                           </div>
                         </div>
                       </div>
@@ -336,129 +346,23 @@ class SimpleForm extends Component {
             <ul classNameName="mt-24">
               {this.state.posts
                 .map((posts, id) => {
-
-
                   if (posts.fields.Creator_Email.stringValue === firebase.auth().currentUser.email) {
                     console.log(firebase.auth().currentUser.email)
+                    console.log()
                     return (
-                      <li key={id} id={id}>
-                        <div className="lg:pl-64 pb-10 clearfix lg:pr-64">
-                          <div className="bg-white p-6 justify-fit-content rounded-lg shadow-lg" style={{ width: '50vw' }}>
-                            <div className="sm:flex sm:flex-shrink-0 justify-between">
-                              <div className="sm:flex sm:info sm:flex-shrink-0">
-                                <div>
-                                  <div className="w-10 h-10 bg-cover bg-center rounded-full mr-3 shadow-inner" style={{ backgroundImage: `url(${posts.fields.Creator_Pic.stringValue})` }}>
-                                  </div>
-                                </div>
-                                <div>
-                                  <p className="text-gray-600 font-medium" title={posts.fields.Creator_Username.stringValue}>{posts.fields.Creator_Username.stringValue}</p>
-                                  <div className="flex items-center text-center text-xs text-gray-600">
-                                    <center>
-                                      <p className="max-w-10 sm:text-center"><TimeAgo date={posts.fields.timeM.stringValue} className="text-center" /></p>
-                                    </center>
-                                  </div>
-                                </div>
-                              </div>
-                              <div className="drop">
-                                <Dropdown postId={posts.fields.uid.stringValue} postname={posts.fields.Post_Title.stringValue} posts_content={posts.fields.Post_Content.stringValue} />
-                              </div>
-                            </div>
-
-                            <div className="mt-4">
-                              <h1>{posts.fields.Post_Title.stringValue}</h1>
-                              <p className="text-gray-600 text-sm">
-                                {posts.fields.Post_Content.stringValue}
-                              </p>
-                            </div>
-                            <div className="flex justify-center">
-                              <div className="mt-4 align-center vertical-align flex justify-items-center items-center">
-                                <div className="flex mr-2 text-gray-700 text-sm mr-3">
-                                  <svg fill="none" viewBox="0 0 24 24" className="w-4 h-4 mr-1" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                  </svg>
-                                  <span>{posts.fields.Likes.integerValue}</span>
-                                </div>
-                                <div className="flex mr-2 text-gray-700 text-sm mr-8">
-                                  <svg fill="none" viewBox="0 0 24 24" className="w-4 h-4 mr-1" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
-                                  </svg>
-                                  <span>{posts.fields.Comments.integerValue}</span>
-                                </div>
-                                {/* <div className="flex mr-2 text-gray-700 text-sm mr-4">
-                                  <svg fill="none" viewBox="0 0 24 24" className="w-4 h-4 mr-1" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-                                  </svg>
-                                  <span>share</span>
-                                </div> */}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-
-                      </li>
+                      <Post posts={posts} dropdown />
                     )
                   }
+
                   else {
                     console.log('no')
                     return (
-                      <li key={id} id={id} >
-                        <div className="lg:pl-64 pb-10 clearfix lg:pr-64">
-                          <div className="bg-white p-6 justify-fit-content rounded-lg shadow-lg" style={{ width: '50vw' }}>
-                            <div className="sm:flex sm:flex-shrink-0 justify-between">
-                              <div className="sm:flex sm:info sm:flex-shrink-0">
-                                <div>
-                                  <div className="w-10 h-10 bg-cover bg-center rounded-full mr-3 shadow-inner" style={{ backgroundImage: `url(${posts.fields.Creator_Pic.stringValue})` }}>
-                                  </div>
-                                </div>
-                                <div>
-                                  <p className="text-gray-600 font-medium" title={posts.fields.Creator_Username.stringValue}>{posts.fields.Creator_Username.stringValue}</p>
-                                  <div className="flex items-center text-center text-xs text-gray-600">
-                                    <center>
-                                      <p className="max-w-10 sm:text-center"><TimeAgo date={posts.fields.timeM.stringValue} className="text-center" /></p>
-                                    </center>
-                                  </div>
-                                </div>
-                              </div>
-
-                            </div>
-
-                            <div className="mt-4">
-                              <h1>{posts.fields.Post_Title.stringValue}</h1>
-                              <p className="text-gray-600 text-sm">
-                                {posts.fields.Post_Content.stringValue}
-                              </p>
-                            </div>
-                            <div className="flex justify-center">
-                              <div className="mt-4 align-center vertical-align flex justify-items-center items-center">
-                                <div className="flex mr-2 text-gray-700 text-sm mr-3">
-                                  <svg fill="red" viewBox="0 0 24 24" className="w-4 h-4 mr-1" stroke="red">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                  </svg>
-                                  <span>12</span>
-                                </div>
-                                <div className="flex mr-2 text-gray-700 text-sm mr-8">
-                                  <svg fill="none" viewBox="0 0 24 24" className="w-4 h-4 mr-1" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
-                                  </svg>
-                                  <span>8</span>
-                                </div>
-                                {/* <div className="flex mr-2 text-gray-700 text-sm mr-4">
-                                  <svg fill="none" viewBox="0 0 24 24" className="w-4 h-4 mr-1" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-                                  </svg>
-                                  <span>share</span>
-                                </div> */}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                      </li>
+                      <Post posts={posts} />
                     )
                   }
+                }).reverse()
+              }
 
-                }).reverse()}
             </ul>
           </center>
         </div>

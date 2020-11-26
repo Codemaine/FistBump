@@ -2,11 +2,9 @@ import React, { useState, useEffect } from 'react'
 import firebase from '../../../firebase'
 import 'firebase/auth'
 import 'firebase/firestore'
-import { useHistory, Link, NavLink } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import Swal from 'sweetalert2/dist/sweetalert2.js'
-import { Modal, Button, Toast } from 'react-bootstrap';
-import Search from './Searchfield';
-import Gravatar from 'react-gravatar'
+
 
 
 
@@ -14,16 +12,20 @@ const Navbar = (props: any) => {
     const [userName, setUsername] = useState();
     const [Name, setUserName] = useState();
     const [ProfilePic, setUserPic] = useState();
+    // eslint-disable-next-line
     const [Email, setUserEmail] = useState();
     const [NewUser, setNewUsername] = useState(userName);
     const [NewName, setNewName] = useState(Name);
     const [NewPass, setNewPass] = useState();
+    // eslint-disable-next-line
     const [show, setShow] = useState(false);
     const [isOpen, setOpen] = useState(false);
     const [navbar, setNavbar] = useState(false);
     const history = useHistory();
 
+    // eslint-disable-next-line
     const handleClose = () => setShow(false);
+    // eslint-disable-next-line
     const handleShow = () => setShow(true);
 
     useEffect(() => {
@@ -42,12 +44,13 @@ const Navbar = (props: any) => {
                 }
             })
     });
-
+    // eslint-disable-next-line
     const Edit = (event: any) => {
         const db = firebase.firestore();
         const cityRef = db.collection('Users').doc(firebase.auth().currentUser?.uid);
 
         // Set the 'capital' field of the city
+        // eslint-disable-next-line
         const res = cityRef.update({
             name: NewName,
             username: NewUser
@@ -98,7 +101,7 @@ const Navbar = (props: any) => {
                 <div className="px-2 pt-2 pb-3">
                     <Link to="/" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Home</Link>
                     <Link to="/settings" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Settings</Link>
-                    <a href="#" className="block px-3 py-2 rounded-md text-base font-medium text-white bg-gray-900 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Users</a>
+                    <a href="/" className="block px-3 py-2 rounded-md text-base font-medium text-white bg-gray-900 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Users</a>
                 </div>
             </div>)
         }
@@ -107,7 +110,7 @@ const Navbar = (props: any) => {
                 <div className="hidden sm:hidden transform opacity-100 scale-100">
                     <div className="px-2 pt-2 pb-3">
                         <Link to="/" className="block px-3 py-2 rounded-md text-base font-medium text-white bg-gray-900 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Home</Link>
-                        <a href="#" className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Users</a>
+                        <a href="/" className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Users</a>
                     </div>
                 </div>
             )
@@ -141,7 +144,7 @@ const Navbar = (props: any) => {
                     <div className="py-1 rounded-md bg-white shadow-xs" role="menu" aria-orientation="vertical" aria-labelledby="user-menu">
                         <Link to={'/user/' + firebase.auth().currentUser!.uid} className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out" role="menuitem">Your Profile</Link>
                         <Link to="/settings" className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out" role="menuitem">Settings</Link>
-                        <a href="#" className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out" role="menuitem" onClick={handleClick}>Sign out</a>
+                        <a href="/" className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out" role="menuitem" onClick={handleClick}>Sign out</a>
                     </div>
                 </div>
             )
@@ -150,9 +153,9 @@ const Navbar = (props: any) => {
             return (
                 <div className="origin-top-right transform opacity-100 scale-100 absolute right-0 mt-2 w-48 invisible rounded-md shadow-lg">
                     <div className="py-1 rounded-md bg-white shadow-xs" role="menu" aria-orientation="vertical" aria-labelledby="user-menu">
-                        <a href="#" className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out" role="menuitem">Your Profile</a>
-                        <a href="#" className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out" role="menuitem">Settings</a>
-                        <a href="#" className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out" role="menuitem" onClick={handleClick}>Sign out</a>
+                        <a href="/" className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out" role="menuitem">Your Profile</a>
+                        <a href="/" className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out" role="menuitem">Settings</a>
+                        <a href="/" className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out" role="menuitem" onClick={handleClick}>Sign out</a>
                     </div>
                 </div>
             )
@@ -162,14 +165,17 @@ const Navbar = (props: any) => {
         )
     }
 
+    // eslint-disable-next-line
     const handleNameChange = (e: any) => {
         setNewName(e.target.value)
     }
 
+    // eslint-disable-next-line
     const handleUserChange = (e: any) => {
         setNewUsername(e.target.value)
     }
 
+    // eslint-disable-next-line
     const handlePassChange = (e: any) => {
         setNewPass(e.target.value)
     }
@@ -204,6 +210,7 @@ const Navbar = (props: any) => {
 
     var email = firebase.auth().currentUser?.email;
     var md5 = require('md5');
+    // eslint-disable-next-line
     var profile_pic = 'https://gravatar.com/avatar/' + md5(email);
     console.clear()
     console.log(`%cThis is a browser feature intended for developers. If someone told you to copy-paste something here to enable a FistBump feature or "hack" someone's account, it is a scam and will give them access to your FistBump account.`, "font-size: large");
@@ -238,7 +245,7 @@ const Navbar = (props: any) => {
                                 <div className="flex">
                                     <Link to="/" className="ml-4 px-3 py-2 rounded-md text-sm font-medium leading-5 text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Home</Link>
                                     <Link to="/settings" className="ml-4 px-3 py-2 rounded-md text-sm font-medium leading-5 text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Settings</Link>
-                                    <a href="#" className="px-3 py-2 rounded-md text-sm font-medium leading-5 text-white bg-gray-900 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Users</a>
+                                    <a href="/" className="px-3 py-2 rounded-md text-sm font-medium leading-5 text-white bg-gray-900 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Users</a>
                                 </div>
                             </div>
                         </div>

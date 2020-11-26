@@ -6,7 +6,6 @@ import "firebase/auth";
 import "firebase/firestore";
 import './u.css'
 import './assets/form.css'
-import loading from './assets/loading.gif'
 import { AuthContext } from "../../../AuthProvider";
 
 interface UserData {
@@ -44,9 +43,9 @@ const Login = () => {
             .catch(error => {
                 console.log(error, 'error');
             });
-
+        // eslint-disable-next-line
     }, []);
-
+    // eslint-disable-next-line
     const setUserProfile = async () => {
         if (await isUserExists()) {
             return;
@@ -82,10 +81,12 @@ const Login = () => {
         history.push("/");
     }
 
+    // eslint-disable-next-line
     const forgot_pass = () => {
         history.push('/forgot-password')
     }
 
+    // eslint-disable-next-line
     const handleClick = () => {
         history.push("/signup")
     }
@@ -125,6 +126,8 @@ const Login = () => {
             });
     }
 
+
+    // eslint-disable-next-line 
     const handleSocialClick = (sns: any) => {
         console.log(sns, 'sns');
 
@@ -178,50 +181,40 @@ const Login = () => {
     console.log(`%cThis is a browser feature intended for developers. If someone told you to copy-paste something here to enable a FistBump feature or "hack" someone's account, it is a scam and will give them access to your FistBump account.`, "font-size: large");
 
     return (
-        <div style={{ position: 'absolute', top: '50%', right: '50%', transform: 'translate(50%, -50%)' }}>
-            {/*
-  Tailwind UI components require Tailwind CSS v1.8 and the @tailwindcss/ui plugin.
-  Read the documentation to get started: https://tailwindui.com/documentation
-*/}
-            <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-                <div className="max-w-md w-full">
-                    <div>
-                        <img className="mx-auto h-12 w-auto" src="https://i.ibb.co/8Nyq7r8/n8pk9u-X-removebg-preview.png" alt="logo" />
-                        <h2 className="mt-6 text-center text-3xl leading-9 font-extrabold text-gray-900">
-                            Log In
-            </h2>
+        <div>
+            <div className="w-full flex flex-wrap">
+                {/* Register Section */}
+                <div className="w-full md:w-1/2 flex flex-col">
+                    <div className="flex justify-center md:justify-start pt-12 md:pl-12 md:-mb-12">
+                        <img src="https://i.ibb.co/tX3qChr/n8pk9u-X-removebg-preview-1.png" alt="" />
                     </div>
-                    <form className="mt-8" onSubmit={handleSubmit}>
-                        <input type="hidden" name="remember" defaultValue="true" />
-                        <div className="rounded-md shadow-sm">
-                            <div>
-                                <input aria-label="Email address" value={values.email} name="email" type="email" className="appearance-none  rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5" onChange={handleChange} placeholder="Email address" />
+                    <div className="flex flex-col justify-center md:justify-start my-auto pt-8 md:pt-0 px-8 md:px-24 lg:px-32">
+                        <p className="text-center text-3xl">LogIn.</p>
+                        <form className="flex flex-col pt-3 md:pt-8" onSubmit={handleSubmit}>
+                            <div className="flex flex-col pt-4">
+                                <label htmlFor="password" className="text-lg">Email</label>
+                                <input type="email" id="email" name="email" value={values.email} onChange={handleChange} placeholder="your@email.com" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline" />
                             </div>
-                            <div className="-mt-px">
-                                <input aria-label="Password" value={values.password} name="password" type="password" className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5" onChange={handleChange} placeholder="Password" />
+                            <div className="flex flex-col pt-4">
+                                <label htmlFor="password" className="text-lg">Password</label>
+                                <input type="password" id="password" value={values.password} onChange={handleChange} name="password" placeholder="Password" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline" />
                             </div>
-                        </div>
-                        <div className="mt-6 flex items-center justify-between">
-                            <div className="text-sm leading-5 text-center">
-                                <p className="text-red-600 text-center" id="error"></p>
-                                <a onClick={forgot_pass} className="font-medium text-center text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition ease-in-out duration-150">
-                                    Forgot your password?
-                </a>
+                            <div className="flex flex-col pt-4">
+                                <p className="text-red-500" id="error"></p>
                             </div>
+                            <div className="flex flex-col pt-4">
+                                <Link to="/forgot-password" className="font-semibold">Forgot your password?</Link>
+                            </div>
+                            <input type="submit" value="Login" className="bg-black text-white font-bold text-lg hover:bg-gray-700 p-2 mt-8" />
+                        </form>
+                        <div className="text-center pt-12 pb-12">
+                            <p>New to FistBump? <Link to="/signup" className="underline font-semibold">Sign Up here</Link></p>
                         </div>
-                        <div className="mt-6">
-                            <button type="submit" className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out">
-                                <span className="absolute left-0 inset-y-0 flex items-center pl-3">
-                                    <svg className="h-5 w-5 text-indigo-500 group-hover:text-indigo-400 transition ease-in-out duration-150" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
-                                    </svg>
-                                </span>
-                Log in
-              </button>
-                            <p className="font-xs text-center" style={{ fontSize: '12px', textAlign: 'center', width: '150px' }}>New to FistBump? <a className="text-indigo-600" onClick={handleClick} style={{ cursor: 'pointer' }}>Create an account</a></p>
-                            <p className="invisible">The password is invalid or the user</p>
-                        </div>
-                    </form>
+                    </div>
+                </div>
+                {/* Image Section */}
+                <div className="w-1/2 shadow-2xl">
+                    <img className="object-cover w-full h-full hidden md:block p-0" src={require('./assets/cover.jpeg')} alt="" />
                 </div>
             </div>
 
