@@ -25,6 +25,7 @@ const SignUp = () => {
     });
     // eslint-disable-next-line
     const [image, setImage] = useState();
+    // eslint-disable-next-line
     const [data, setData] = useState(false);
 
     const history = useHistory();
