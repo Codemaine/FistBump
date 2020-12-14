@@ -3,7 +3,7 @@ import './Search.css'
 import 'axios'
 import 'firebase/firestore'
 import Navbar from './searchnav.tsx'
-import { Link } from 'react-router-dom'
+import { Link, useParams, useHistory } from 'react-router-dom'
 
 export default class Search extends Component {
   constructor(props) {
@@ -17,6 +17,8 @@ export default class Search extends Component {
 
 
   componentDidMount() {
+    let { search } = useParams();
+    this.setState({ search: search })
     fetch('https://firestore.googleapis.com/v1/projects/fistbump-b9aaa/databases/(default)/documents/Users')
       .then(res => res.json())
       .then(users => {
@@ -25,7 +27,10 @@ export default class Search extends Component {
   }
 
   handleChange(event) {
-    this.setState({ search: [event.target.value] })
+    let history = useHistory();
+    history.push({
+    pathname: `/search/{event.target.value}`
+    })
   }
 
   renderUser() {
