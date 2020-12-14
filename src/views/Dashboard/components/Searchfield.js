@@ -88,7 +88,7 @@ export default class Search extends Component {
                                       <img class="h-10 w-10 rounded-full" src={user.fields.Profile_Pic.stringValue} alt="Profile" />
                                     </div>
                                     <div class="ml-4">
-                                      <a href={`https://fist-bump.vercel.app/user/${user.fields.uid.stringValue}`} class="text-sm leading-5 font-medium text-gray-900">
+                                      <a href={`https://fist-bump.vercel.app/user/${user.fields.uid.stringValue}`} onClick={return false} class="text-sm leading-5 font-medium text-gray-900">
                                         {user.fields.name.stringValue}
                                       </a>
                                       <div class="text-sm leading-5 text-gray-500">
