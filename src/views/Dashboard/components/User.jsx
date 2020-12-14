@@ -138,7 +138,7 @@ class User extends Component {
                         You're Offline! Connect to the internet use FistBump
 </div>
                 </Offline>
-                < div className="center" >
+                <div className="center">
                     <div class="bg-white shadow p-4 rounded lg:w-64">
 
                         <Offline> <div className="flex justify-center mt-4">
@@ -186,7 +186,7 @@ class User extends Component {
                             </div>
                         </Online>
                     </div>
-                </div >
+                </div>
             </>
         )
     }
