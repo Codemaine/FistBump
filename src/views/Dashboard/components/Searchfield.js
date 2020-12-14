@@ -17,7 +17,11 @@ export default class Search extends Component {
 
 
   componentDidMount() {
+    if (this.props.match.params.search != ""){
     this.setState({ search: this.props.match.params.search })
+    }else {
+    this.setState({ search: "" })
+    } 
     fetch('https://firestore.googleapis.com/v1/projects/fistbump-b9aaa/databases/(default)/documents/Users')
       .then(res => res.json())
       .then(users => {
