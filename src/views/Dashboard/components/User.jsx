@@ -40,7 +40,7 @@ class User extends Component {
                 this.setState({ Following: user.fields.Following.integerValue })
                 this.setState({ Followers_Array: user.fields.Followers_Array.arrayValue.values })
                 console.log(this.state.Followers_Array)
-                if (this.state.username === '') {
+                if (user.fields = undefined) {
                     var history = useHistory();
                     history.push('/404')
                 }
