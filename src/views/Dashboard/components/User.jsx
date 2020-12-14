@@ -40,13 +40,8 @@ class User extends Component {
                 this.setState({ Following: user.fields.Following.integerValue })
                 this.setState({ Followers_Array: user.fields.Followers_Array.arrayValue.values })
                 console.log(this.state.Followers_Array)
-                if (user.fields = undefined) {
-                    var history = useHistory();
-                    history.push('/404')
-                }
                 this.state.Followers_Array.filter(user => {
                     return user.stringValue.indexOf(firebase.auth().currentUser.uid) <= 0
-
                 })
                     // eslint-disable-next-line
                     .map((user) => {
@@ -101,7 +96,7 @@ class User extends Component {
                 washingtonRe.update({
                     Following: firebase.firestore.FieldValue.increment(1)
                 });
-
+          window.location.reload();
             })
             .catch(function (error) {
                 // The document probably doesn't exist.
