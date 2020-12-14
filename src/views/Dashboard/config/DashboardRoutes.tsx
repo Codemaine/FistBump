@@ -9,7 +9,7 @@ export const DashboardRoutes = () => {
     return (
         <Switch>
             <Route exact path="/" component={Dashboard} />
-            <Route exact path="/search/:search" component={Search} />
+            <Route exact path="/search/:search?" component={Search} />
             <Route exact path="/settings" component={Settings} />
             <Route exact path="/user/:name" component={User} />
         </Switch>
