@@ -27,8 +27,7 @@ export default class Search extends Component {
   }
 
   handleChange(event) {
-    let history = useHistory();
-    history.push({
+    this.props.history.push({
     pathname: `/search/{event.target.value}`
     })
   }
