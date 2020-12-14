@@ -17,7 +17,7 @@ export default class Search extends Component {
 
 
   componentDidMount() {
-    if (this.props.match.params.search != ""){
+    if (this.props.match.params.search != undefined){
     this.setState({ search: this.props.match.params.search })
     }else {
     this.setState({ search: "" })
