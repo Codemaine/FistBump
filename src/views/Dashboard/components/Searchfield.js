@@ -88,14 +88,9 @@ export default class Search extends Component {
                                       <img class="h-10 w-10 rounded-full" src={user.fields.Profile_Pic.stringValue} alt="Profile" />
                                     </div>
                                     <div class="ml-4">
-                                      <Link to={{
-                                        pathname: `user/${user.fields.uid.stringValue}`,
-                                        state: {
-                                          user
-                                        }
-                                      }} userInfo={user} class="text-sm leading-5 font-medium text-gray-900">
+                                      <a href={`https://fist-bump.vercel.app/user/${user.fields.uid.stringValue}`} class="text-sm leading-5 font-medium text-gray-900">
                                         {user.fields.name.stringValue}
-                                      </Link>
+                                      </a>
                                       <div class="text-sm leading-5 text-gray-500">
                                         {user.fields.username.stringValue}
                                       </div>
